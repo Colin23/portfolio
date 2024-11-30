@@ -1,0 +1,11 @@
+[[redirects]]
+from = "https://colin-moerbe.com/*"
+to = "https://colinmoerbe.com/:splat"
+status = 301
+force = true
+
+[[redirects]]
+from = "https://www.colin-moerbe.com/*"
+to = "https://colinmoerbe.com/:splat"
+status = 301
+force = true
