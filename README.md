@@ -23,6 +23,7 @@ This repository contains my personal portfolio.
 - [Architecture & Data Flow](docs/architecture.md)
 - [Tech Stack Details](docs/tech-stack.md)
 - [How to Update Content](docs/how-to-update.md)
+- [Known Issues](docs/known-issues.md)
 - [AI Agent Rules](AGENTS.md)
 
 ## 📜 License

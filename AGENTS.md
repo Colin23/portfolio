@@ -5,3 +5,4 @@
 - Always use `bun` and its commands (e.g. `bun install`, `bun run`); do not use `npm` or `pnpm` in this project.
 - Always ensure that the documentation in the `docs/` folder and `README.md` is up to date when making changes to the project.
 - All commits must follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+- All technical content (Experience, Skills, Projects, Certificates) must be pulled from the respective Markdown files in `src/lib/content/` to maintain a single source of truth. Do not hardcode this data in Svelte files.

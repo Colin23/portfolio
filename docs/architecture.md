@@ -17,8 +17,8 @@ The project is designed so that professional data is defined once and consumed b
 
 ### 3. Presentation Layer (SvelteKit & Tailwind)
 
-- **Web View:** The `/cv` route imports the Markdown components and wraps them in Tailwind-styled sections.
-- **PDF View:** The same `/cv` route uses CSS Print Media Queries (`@media print`) to reformat the HTML for an A4 paper layout.
+- **Landing Page (`/`)**: A single-page scrollable layout that imports the Markdown components for sections like Experience, Skills, and Certificates. It uses **ScrollSpy** (via Intersection Observer) to highlight active navigation items.
+- **Print View (`/cv`)**: A dedicated route that imports the same Markdown components but optimizes the layout for A4 paper. It is typically printed via a hidden iframe triggered by the "Download CV" button in the navbar.
 - **Print Logic:**
     - `@page { margin: 0; }` hides browser headers/footers.
     - `.print-container` adds physical padding to simulate margins.

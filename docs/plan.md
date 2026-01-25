@@ -18,15 +18,20 @@ This portfolio website serves as:
 
 ## Key Features
 
-- **About Me**: Hardcoded section for the landing page.
-- **Work Experience**: Markdown-driven list.
+- **About Me**: Hero section on the landing page.
+- **Work Experience**: Markdown-driven section.
 - **Skills**: Markdown-driven with proficiency levels.
-- **Projects**: Markdown-driven with descriptions, tech stack, and links.
+- **Projects**: Markdown-driven with descriptions and tech stack.
+- **Certificates**: Markdown-driven section for professional certifications.
+- **Contact**: Section with contact details and a Netlify-integrated form.
 - **Downloadable CV (PDF)**:
+    - Dedicated print-optimized route (`/cv`).
+    - Triggered via a 'Download CV' button in the navbar using a hidden iframe.
     - Generated automatically from Markdown -> HTML -> PDF.
     - Ensures website and PDF remain in sync.
-- **Responsive Design**: Mobile-friendly via Tailwind CSS.
-- **Contact Form**: Integrated with Netlify Forms.
+- **Responsive Design**: Mobile-friendly via Tailwind CSS with a hamburger menu.
+- **Dark Mode**: System-default aware with manual toggle.
+- **ScrollSpy**: Navbar highlighting based on scroll position.
 - **SEO-friendly**: Static Site Generation (SSG) for fast indexing.
 
 ## Future Considerations
