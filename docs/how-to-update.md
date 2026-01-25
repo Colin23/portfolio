@@ -36,7 +36,6 @@ The output will be in the `build/` directory.
 The PDF is generated using the browser's print engine to ensure it perfectly matches your website's styling.
 To 'download' your CV as a PDF:
 
-1. Navigate to the `/cv` page.
-2. Click the 'Download PDF' button.
-3. In the browser's print dialog, select 'Save as PDF' as the destination.
-4. (Optional) In the print settings, ensure 'Background graphics' is enabled if you have colored backgrounds.
+1. Click the 'Download CV' button in the navigation bar.
+2. In the browser's print dialog, select 'Save as PDF' as the destination.
+3. (Optional) In the print settings, ensure 'Background graphics' is enabled if you have colored backgrounds.

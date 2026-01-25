@@ -1,2 +1,14 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+    --color-accent: var(--color-blue-600);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
