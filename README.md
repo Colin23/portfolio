@@ -1,4 +1,4 @@
-# Professional Portfolio & CV
+# Professional Portfolio & CV - [![Netlify Status](https://api.netlify.com/api/v1/badges/c62f9035-43dd-4892-a02a-33f22c10e919/deploy-status)](https://app.netlify.com/projects/colinmoerbe/deploys)
 
 This repository contains my personal portfolio.
 
@@ -28,4 +28,4 @@ This repository contains my personal portfolio.
 
 ## 📜 License
 
-MIT
+[License](LICENSE)
