@@ -12,6 +12,9 @@
     const { title, tech, content, github, liveDemo }: Props = $props();
     let isModalOpen = $state(false);
 
+    /**
+     * Toggles the visibility of the details modal.
+     */
     function toggleModal() {
         isModalOpen = !isModalOpen;
     }

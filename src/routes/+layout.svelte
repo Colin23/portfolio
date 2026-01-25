@@ -54,6 +54,10 @@
 
     let observer: IntersectionObserver | undefined;
 
+    /**
+     * Sets up the IntersectionObserver to track the active section during scroll.
+     * Only active on the home page.
+     */
     function setupObserver() {
         if (!browser) return;
 
@@ -109,6 +113,9 @@
         }
     });
 
+    /**
+     * Triggers the CV download by opening the /cv route in a hidden iframe and printing it.
+     */
     function downloadCV() {
         if (!browser) return;
         const iframe = document.createElement("iframe");
@@ -136,19 +143,33 @@
         };
     }
 
+    /**
+     * Toggles between light and dark mode and saves the preference to localStorage.
+     */
     function toggleTheme() {
         const isDark = document.documentElement.classList.toggle("dark");
         localStorage.theme = isDark ? "dark" : "light";
     }
 
+    /**
+     * Toggles the mobile navigation menu.
+     */
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
     }
 
+    /**
+     * Closes the mobile navigation menu.
+     */
     function closeMenu() {
         isMenuOpen = false;
     }
 
+    /**
+     * Handles navigation link clicks, updating the active section and closing the menu.
+     *
+     * @param {string} id - The ID of the section to navigate to.
+     */
     function handleNavClick(id: string) {
         scrollSection = id;
         closeMenu();

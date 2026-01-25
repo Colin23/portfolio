@@ -10,6 +10,9 @@
     const { title, period, content }: Props = $props();
     let isModalOpen = $state(false);
 
+    /**
+     * Toggles the visibility of the details modal.
+     */
     function toggleModal() {
         isModalOpen = !isModalOpen;
     }

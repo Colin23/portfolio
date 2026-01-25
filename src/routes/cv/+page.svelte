@@ -4,6 +4,9 @@
     import Projects from "$lib/content/projects.md";
     import Certificates from "$lib/content/certificates.md";
 
+    /**
+     * Triggers the browser's print dialog.
+     */
     function handlePrint() {
         window.print();
     }
