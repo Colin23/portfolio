@@ -118,12 +118,13 @@
 
         iframe.onload = () => {
             if (iframe.contentWindow) {
-                iframe.contentWindow.print();
-                // We keep it in the DOM until printing is done, but technically print() is blocking in most browsers
-                // or opens a dialog. Removing it too early might break printing.
-                setTimeout(() => {
+                const win = iframe.contentWindow;
+                const cleanup = () => {
+                    win.removeEventListener("afterprint", cleanup);
                     document.body.removeChild(iframe);
-                }, 1000);
+                };
+                win.addEventListener("afterprint", cleanup);
+                win.print();
             }
         };
     }

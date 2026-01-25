@@ -32,7 +32,7 @@ function parseExperience(content: string) {
         const lines = section.split("\n");
         const title = lines[0].trim();
         const dateLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const period = dateLine ? dateLine.replaceAll('_', "").trim() : "";
+        const period = dateLine ? dateLine.replaceAll("_", "").trim() : "";
 
         const dateIndex = dateLine ? lines.indexOf(dateLine) : -1;
         const contentStart = dateIndex >= 0 ? dateIndex + 1 : 1;
@@ -62,9 +62,9 @@ function parseCertificates(content: string) {
         const lines = section.split("\n");
         const title = lines[0].trim();
         const infoLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const info = infoLine ? infoLine.replaceAll('_', "").trim() : "";
+        const info = infoLine ? infoLine.replaceAll("_", "").trim() : "";
 
-        const link = lines.find(l => l.includes("[View Certificate]"))?.match(/\((.*)\)/)?.[1];
+        const link = lines.find(l => l.includes("[View Certificate]"))?.match(/\(([^)]+)\)/)?.[1];
 
         return {
             title,
@@ -80,7 +80,7 @@ function parseProjects(content: string) {
         const lines = section.split("\n");
         const title = lines[0].trim();
         const techLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const tech = techLine ? techLine.replaceAll('_', "").trim() : "";
+        const tech = techLine ? techLine.replaceAll("_", "").trim() : "";
 
         // Extract content between tech line and links
         const techIndex = techLine ? lines.indexOf(techLine) : -1;
@@ -100,8 +100,8 @@ function parseProjects(content: string) {
             })
             .join("\n");
 
-        const github = lines.find(l => l.startsWith("[GitHub]"))?.match(/\((.*)\)/)?.[1];
-        const liveDemo = lines.find(l => l.startsWith("[Live Demo]"))?.match(/\((.*)\)/)?.[1];
+        const github = lines.find(l => l.startsWith("[GitHub]"))?.match(/\(([^)]+)\)/)?.[1];
+        const liveDemo = lines.find(l => l.startsWith("[Live Demo]"))?.match(/\(([^)]+)\)/)?.[1];
 
         return {
             title,
@@ -121,7 +121,7 @@ function parseSkills(content: string) {
         const items = lines
             .slice(1)
             .filter(l => l.startsWith("- "))
-            .map(l => l.substring(2).replaceAll('**', "").trim());
+            .map(l => l.substring(2).replaceAll("**", "").trim());
 
         return {
             title,
