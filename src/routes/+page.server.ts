@@ -32,9 +32,10 @@ function parseExperience(content: string) {
         const lines = section.split("\n");
         const title = lines[0].trim();
         const dateLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const period = dateLine ? dateLine.replace(/_/g, "").trim() : "";
+        const period = dateLine ? dateLine.replaceAll('_', "").trim() : "";
 
-        const contentStart = lines.indexOf(dateLine!) + 1;
+        const dateIndex = dateLine ? lines.indexOf(dateLine) : -1;
+        const contentStart = dateIndex >= 0 ? dateIndex + 1 : 1;
         const rawContent = lines.slice(contentStart).join("\n").trim();
 
         const htmlContent = rawContent
@@ -61,7 +62,7 @@ function parseCertificates(content: string) {
         const lines = section.split("\n");
         const title = lines[0].trim();
         const infoLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const info = infoLine ? infoLine.replace(/_/g, "").trim() : "";
+        const info = infoLine ? infoLine.replaceAll('_', "").trim() : "";
 
         const link = lines.find(l => l.includes("[View Certificate]"))?.match(/\((.*)\)/)?.[1];
 
@@ -79,10 +80,11 @@ function parseProjects(content: string) {
         const lines = section.split("\n");
         const title = lines[0].trim();
         const techLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const tech = techLine ? techLine.replace(/_/g, "").trim() : "";
+        const tech = techLine ? techLine.replaceAll('_', "").trim() : "";
 
         // Extract content between tech line and links
-        const contentStart = lines.indexOf(techLine!) + 1;
+        const techIndex = techLine ? lines.indexOf(techLine) : -1;
+        const contentStart = techIndex >= 0 ? techIndex + 1 : 1;
         const linksStart = lines.findIndex(l => l.startsWith("[GitHub]") || l.startsWith("[Live Demo]"));
         const rawContentLines = lines.slice(contentStart, linksStart > -1 ? linksStart : undefined);
         const rawContent = rawContentLines.join("\n").trim();
@@ -119,7 +121,7 @@ function parseSkills(content: string) {
         const items = lines
             .slice(1)
             .filter(l => l.startsWith("- "))
-            .map(l => l.substring(2).replace(/\*\*/g, "").trim());
+            .map(l => l.substring(2).replaceAll('**', "").trim());
 
         return {
             title,
