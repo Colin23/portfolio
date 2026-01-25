@@ -25,11 +25,10 @@
     });
 
     $effect(() => {
-        if (show) {
-            document.body.style.overflow = "hidden";
-        } else {
+        document.body.style.overflow = show ? "hidden" : "unset";
+        return () => {
             document.body.style.overflow = "unset";
-        }
+        };
     });
 </script>
 
