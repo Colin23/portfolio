@@ -11,7 +11,7 @@ both the website's CV page and the generated PDF.
 
 ## About Me Section
 
-The "About Me" section on the landing page is hardcoded in `src/routes/+page.svelte`. You can edit it there.
+The 'About Me' section on the landing page is hardcoded in `src/routes/+page.svelte`. You can edit it there.
 
 ## Development
 
@@ -33,10 +33,10 @@ The output will be in the `build/` directory.
 
 ## PDF Generation
 
-The PDF is generated using the browser's print engine to ensure it perfectly matches your website's styling. To "
-download" your CV as a PDF:
+The PDF is generated using the browser's print engine to ensure it perfectly matches your website's styling.
+To 'download' your CV as a PDF:
 
 1. Navigate to the `/cv` page.
-2. Click the "Download PDF" button.
-3. In the browser's print dialog, select "Save as PDF" as the destination.
-4. (Optional) In the print settings, ensure "Background graphics" is enabled if you have colored backgrounds.
+2. Click the 'Download PDF' button.
+3. In the browser's print dialog, select 'Save as PDF' as the destination.
+4. (Optional) In the print settings, ensure 'Background graphics' is enabled if you have colored backgrounds.
