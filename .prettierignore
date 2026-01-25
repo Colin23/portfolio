@@ -1,0 +1,11 @@
+# Package Managers
+bun.lock
+bun.lockb
+
+# Build output
+.svelte-kit/
+build/
+node_modules/
+
+# Miscellaneous
+/static/
