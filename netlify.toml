@@ -1,3 +1,7 @@
+[build]
+  command = "bun run build"
+  publish = "build"
+
 [[redirects]]
 from = "https://colin-moerbe.com/*"
 to = "https://colinmoerbe.com/:splat"
