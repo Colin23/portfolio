@@ -119,12 +119,19 @@
         iframe.onload = () => {
             if (iframe.contentWindow) {
                 const win = iframe.contentWindow;
+                let cleaned = false;
                 const cleanup = () => {
+                    if (cleaned) return;
+                    cleaned = true;
                     win.removeEventListener("afterprint", cleanup);
-                    document.body.removeChild(iframe);
+                    if (iframe.parentNode) {
+                        document.body.removeChild(iframe);
+                    }
                 };
                 win.addEventListener("afterprint", cleanup);
                 win.print();
+                // Fallback if afterprint doesn't fire (60s timeout)
+                setTimeout(cleanup, 60000);
             }
         };
     }
