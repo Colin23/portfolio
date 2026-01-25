@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, type Snippet } from "svelte";
+    import { type Snippet } from "svelte";
 
     interface Props {
         show: boolean;
@@ -10,16 +10,17 @@
 
     const { show, title, onClose, children }: Props = $props();
 
-    function handleKeydown(event: KeyboardEvent) {
-        if (event.key === "Escape") {
-            onClose();
-        }
-    }
+    // Only listen for Escape when modal is shown
+    $effect(() => {
+        if (!show) return;
 
-    onMount(() => {
         const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
+            if (e.key === "Escape") {
+                e.stopPropagation();
+                onClose();
+            }
         };
+
         window.addEventListener("keydown", handleEscape);
         return () => window.removeEventListener("keydown", handleEscape);
     });
@@ -34,19 +35,21 @@
 
 {#if show}
     <!-- Backdrop -->
-    <!-- eslint-disable-next-line svelte/valid-compile -->
     <div
-        class="fixed inset-0 z-[60] flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-60 flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-sm"
         onclick={onClose}
-        onkeydown={handleKeydown}
+        onkeydown={e => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClose();
+            }
+        }}
         role="button"
         tabindex="0">
         <!-- Modal Content -->
-        <!-- eslint-disable-next-line svelte/valid-compile -->
         <div
             class="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-gray-100 bg-white p-8 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
             onclick={e => e.stopPropagation()}
-            onkeydown={e => e.stopPropagation()}
             role="presentation">
             <div class="mb-6 flex items-center justify-between">
                 <h2 class="text-2xl font-bold">{title}</h2>
