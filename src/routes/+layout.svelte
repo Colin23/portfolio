@@ -33,16 +33,14 @@
             scrollSection = hash;
         } else if (!scrollSection) {
             // Check scroll position if no hash
-            const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean);
+            const sections = navItems
+                .map(item => document.getElementById(item.id))
+                .filter((el): el is HTMLElement => el !== null);
             let currentSection = "about";
             for (const section of sections) {
-                const rect =
-                    section?.getBoundingClientRect() ??
-                    (() => {
-                        throw new Error("Section element is null");
-                    })();
+                const rect = section.getBoundingClientRect();
                 if (rect.top <= 120) {
-                    currentSection = section?.id ?? "";
+                    currentSection = section.id;
                 }
             }
             scrollSection = currentSection;
@@ -186,7 +184,7 @@
     <header
         class="fixed top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/80 print:hidden">
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
-            <a href="/#about" class="text-xl font-bold tracking-tight" onclick={(): void => handleNavClick("about")}>
+            <a href="/#about" class="text-xl font-bold tracking-tight" onclick={() => handleNavClick("about")}>
                 Portfolio
             </a>
             <!-- Desktop Nav -->
