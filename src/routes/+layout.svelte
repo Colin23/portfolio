@@ -33,12 +33,14 @@
             scrollSection = hash;
         } else if (!scrollSection) {
             // Check scroll position if no hash
-            const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean);
+            const sections = navItems
+                .map(item => document.getElementById(item.id))
+                .filter((el): el is HTMLElement => el !== null);
             let currentSection = "about";
             for (const section of sections) {
-                const rect = section!.getBoundingClientRect();
+                const rect = section.getBoundingClientRect();
                 if (rect.top <= 120) {
-                    currentSection = section!.id;
+                    currentSection = section.id;
                 }
             }
             scrollSection = currentSection;
@@ -54,13 +56,17 @@
 
     let observer: IntersectionObserver | undefined;
 
-    function setupObserver() {
+    /**
+     * Sets up the IntersectionObserver to track the active section during scroll.
+     * Only active on the home page.
+     */
+    function setupObserver(): void {
         if (!browser) return;
 
         observer?.disconnect();
 
         observer = new IntersectionObserver(
-            entries => {
+            (entries): void => {
                 if (page.url.pathname !== "/") return;
 
                 const intersectingEntries = entries.filter(e => e.isIntersecting);
@@ -89,17 +95,17 @@
         });
     }
 
-    onMount(() => {
+    onMount((): (() => void) => {
         // Setup observer immediately if on home page
         if (page.url.pathname === "/") {
             setupObserver();
         }
 
-        return () => observer?.disconnect();
+        return (): void => observer?.disconnect();
     });
 
     // Handle client-side navigation between routes
-    $effect(() => {
+    $effect((): void => {
         const path = page.url.pathname;
 
         if (path === "/") {
@@ -109,18 +115,21 @@
         }
     });
 
-    function downloadCV() {
+    /**
+     * Triggers the CV download by opening the /cv route in a hidden iframe and printing it.
+     */
+    function downloadCV(): void {
         if (!browser) return;
         const iframe = document.createElement("iframe");
         iframe.style.display = "none";
         iframe.src = "/cv";
         document.body.appendChild(iframe);
 
-        iframe.onload = () => {
+        iframe.onload = (): void => {
             if (iframe.contentWindow) {
                 const win = iframe.contentWindow;
                 let cleaned = false;
-                const cleanup = () => {
+                const cleanup = (): void => {
                     if (cleaned) return;
                     cleaned = true;
                     win.removeEventListener("afterprint", cleanup);
@@ -136,20 +145,34 @@
         };
     }
 
-    function toggleTheme() {
+    /**
+     * Toggles between light and dark mode and saves the preference to localStorage.
+     */
+    function toggleTheme(): void {
         const isDark = document.documentElement.classList.toggle("dark");
         localStorage.theme = isDark ? "dark" : "light";
     }
 
-    function toggleMenu() {
+    /**
+     * Toggles the mobile navigation menu.
+     */
+    function toggleMenu(): void {
         isMenuOpen = !isMenuOpen;
     }
 
-    function closeMenu() {
+    /**
+     * Closes the mobile navigation menu.
+     */
+    function closeMenu(): void {
         isMenuOpen = false;
     }
 
-    function handleNavClick(id: string) {
+    /**
+     * Handles navigation link clicks, updating the active section and closing the menu.
+     *
+     * @param {string} id - The ID of the section to navigate to.
+     */
+    function handleNavClick(id: string): void {
         scrollSection = id;
         closeMenu();
     }
