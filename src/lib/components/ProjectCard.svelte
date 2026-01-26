@@ -15,7 +15,7 @@
     /**
      * Toggles the visibility of the details modal.
      */
-    function toggleModal() {
+    function toggleModal(): void {
         isModalOpen = !isModalOpen;
     }
 </script>

@@ -7,7 +7,7 @@
     /**
      * Triggers the browser's print dialog.
      */
-    function handlePrint() {
+    function handlePrint(): void {
         window.print();
     }
 </script>

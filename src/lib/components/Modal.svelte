@@ -14,7 +14,7 @@
     $effect(() => {
         if (!show) return;
 
-        const handleEscape = (e: KeyboardEvent) => {
+        const handleEscape = (e: KeyboardEvent): void => {
             if (e.key === "Escape") {
                 e.stopPropagation();
                 onClose();
@@ -22,12 +22,12 @@
         };
 
         window.addEventListener("keydown", handleEscape);
-        return () => window.removeEventListener("keydown", handleEscape);
+        return (): void => window.removeEventListener("keydown", handleEscape);
     });
 
     $effect(() => {
         document.body.style.overflow = show ? "hidden" : "unset";
-        return () => {
+        return (): void => {
             document.body.style.overflow = "unset";
         };
     });

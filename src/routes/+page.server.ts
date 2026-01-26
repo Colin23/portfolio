@@ -32,7 +32,7 @@ export const load: PageServerLoad = () => {
  * @param {string} content - The raw Markdown content from experience.md.
  * @returns {Array<{title: string, period: string, content: string}>} Array of experience objects.
  */
-function parseExperience(content: string) {
+function parseExperience(content: string): Array<{ title: string; period: string; content: string }> {
     // Split content by H2 headers (## Title)
     const sections = content.split(/^## /m).slice(1);
     return sections.map(section => {
@@ -72,7 +72,7 @@ function parseExperience(content: string) {
  * @param {string} content - The raw Markdown content from certificates.md.
  * @returns {Array<{title: string, info: string, link: string | undefined}>} Array of certificate objects.
  */
-function parseCertificates(content: string) {
+function parseCertificates(content: string): Array<{ title: string; info: string; link: string | undefined }> {
     // Split content by H2 headers (## Title)
     const sections = content.split(/^## /m).slice(1);
     return sections.map(section => {
@@ -99,7 +99,13 @@ function parseCertificates(content: string) {
  * @param {string} content - The raw Markdown content from projects.md.
  * @returns {Array<{title: string, tech: string, content: string, github: string | undefined, liveDemo: string | undefined}>} Array of project objects.
  */
-function parseProjects(content: string) {
+function parseProjects(content: string): Array<{
+    title: string;
+    tech: string;
+    content: string;
+    github: string | undefined;
+    liveDemo: string | undefined;
+}> {
     // Split content by H2 headers (## Title)
     const sections = content.split(/^## /m).slice(1);
     return sections.map(section => {
@@ -149,7 +155,7 @@ function parseProjects(content: string) {
  * @param {string} content - The raw Markdown content from skills.md.
  * @returns {Array<{title: string, items: string[]}>} Array of skill categories.
  */
-function parseSkills(content: string) {
+function parseSkills(content: string): Array<{ title: string; items: string[] }> {
     // Split content by H2 headers (## Category)
     const sections = content.split(/^## /m).slice(1);
     return sections.map(section => {

@@ -36,9 +36,13 @@
             const sections = navItems.map(item => document.getElementById(item.id)).filter(Boolean);
             let currentSection = "about";
             for (const section of sections) {
-                const rect = section!.getBoundingClientRect();
+                const rect =
+                    section?.getBoundingClientRect() ??
+                    (() => {
+                        throw new Error("Section element is null");
+                    })();
                 if (rect.top <= 120) {
-                    currentSection = section!.id;
+                    currentSection = section?.id ?? "";
                 }
             }
             scrollSection = currentSection;
@@ -58,13 +62,13 @@
      * Sets up the IntersectionObserver to track the active section during scroll.
      * Only active on the home page.
      */
-    function setupObserver() {
+    function setupObserver(): void {
         if (!browser) return;
 
         observer?.disconnect();
 
         observer = new IntersectionObserver(
-            entries => {
+            (entries): void => {
                 if (page.url.pathname !== "/") return;
 
                 const intersectingEntries = entries.filter(e => e.isIntersecting);
@@ -93,17 +97,17 @@
         });
     }
 
-    onMount(() => {
+    onMount((): (() => void) => {
         // Setup observer immediately if on home page
         if (page.url.pathname === "/") {
             setupObserver();
         }
 
-        return () => observer?.disconnect();
+        return (): void => observer?.disconnect();
     });
 
     // Handle client-side navigation between routes
-    $effect(() => {
+    $effect((): void => {
         const path = page.url.pathname;
 
         if (path === "/") {
@@ -116,18 +120,18 @@
     /**
      * Triggers the CV download by opening the /cv route in a hidden iframe and printing it.
      */
-    function downloadCV() {
+    function downloadCV(): void {
         if (!browser) return;
         const iframe = document.createElement("iframe");
         iframe.style.display = "none";
         iframe.src = "/cv";
         document.body.appendChild(iframe);
 
-        iframe.onload = () => {
+        iframe.onload = (): void => {
             if (iframe.contentWindow) {
                 const win = iframe.contentWindow;
                 let cleaned = false;
-                const cleanup = () => {
+                const cleanup = (): void => {
                     if (cleaned) return;
                     cleaned = true;
                     win.removeEventListener("afterprint", cleanup);
@@ -146,7 +150,7 @@
     /**
      * Toggles between light and dark mode and saves the preference to localStorage.
      */
-    function toggleTheme() {
+    function toggleTheme(): void {
         const isDark = document.documentElement.classList.toggle("dark");
         localStorage.theme = isDark ? "dark" : "light";
     }
@@ -154,14 +158,14 @@
     /**
      * Toggles the mobile navigation menu.
      */
-    function toggleMenu() {
+    function toggleMenu(): void {
         isMenuOpen = !isMenuOpen;
     }
 
     /**
      * Closes the mobile navigation menu.
      */
-    function closeMenu() {
+    function closeMenu(): void {
         isMenuOpen = false;
     }
 
@@ -170,7 +174,7 @@
      *
      * @param {string} id - The ID of the section to navigate to.
      */
-    function handleNavClick(id: string) {
+    function handleNavClick(id: string): void {
         scrollSection = id;
         closeMenu();
     }
@@ -182,7 +186,7 @@
     <header
         class="fixed top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/80 print:hidden">
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
-            <a href="/#about" class="text-xl font-bold tracking-tight" onclick={() => handleNavClick("about")}>
+            <a href="/#about" class="text-xl font-bold tracking-tight" onclick={(): void => handleNavClick("about")}>
                 Portfolio
             </a>
             <!-- Desktop Nav -->
