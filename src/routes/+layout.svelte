@@ -335,14 +335,6 @@
                             {item.name}
                         </a>
                     {/each}
-                    <button
-                        onclick={() => {
-                            closeMenu();
-                            downloadCV();
-                        }}
-                        class="self-start rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none">
-                        Download CV
-                    </button>
                 </div>
             </div>
         {/if}
