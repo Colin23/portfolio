@@ -42,7 +42,7 @@
 
 <div class="mx-auto max-w-5xl px-4 py-8 md:px-8">
     <!-- About Section (Hero) -->
-    <section id="about" class="flex min-h-[70vh] flex-col justify-center py-20">
+    <section id="about" class="scroll-mt-24 flex min-h-[70vh] flex-col justify-center py-20">
         <h1 class="mb-6 text-5xl font-extrabold tracking-tight md:text-7xl">
             Hi, I'm <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
         </h1>
@@ -63,7 +63,7 @@
 
     <!-- Skills Section -->
     <hr class="border-gray-100 dark:border-slate-800" />
-    <section id="skills" class="py-20">
+    <section id="skills" class="scroll-mt-24 py-20">
         <h2 class="mb-12 text-3xl font-bold">Technical Expertise</h2>
 
         <div class="grid gap-6 md:grid-cols-2">
@@ -96,7 +96,7 @@
 
     <!-- Experience Section -->
     <hr class="border-gray-100 dark:border-slate-800" />
-    <section id="experience" class="py-20">
+    <section id="experience" class="scroll-mt-24 py-20">
         <h2 class="mb-12 text-3xl font-bold">Professional Experience</h2>
         <div class="space-y-6">
             {#each experience as exp (exp.title)}
@@ -107,7 +107,7 @@
 
     <!-- Education Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
-    <section id="education" class="py-20">
+    <section id="education" class="scroll-mt-24 py-20">
         <h2 class="mb-12 text-3xl font-bold">Education</h2>
         <div class="space-y-6">
             {#each education as edu (edu.institution)}
@@ -123,7 +123,7 @@
 
     <!-- Languages Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
-    <section id="languages" class="py-20">
+    <section id="languages" class="scroll-mt-24 py-20">
         <h2 class="mb-12 text-3xl font-bold">Languages</h2>
         <div class="space-y-2">
             {#each languages as language, i (i)}
@@ -134,7 +134,7 @@
 
     <!-- Projects Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
-    <section id="projects" class="py-20">
+    <section id="projects" class="scroll-mt-24 py-20">
         <h2 class="mb-12 text-3xl font-bold">Projects</h2>
         <div class="grid gap-8 md:grid-cols-2">
             {#each projects as project (project.title)}
@@ -145,7 +145,7 @@
 
     <!-- Certificates Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
-    <section id="certificates" class="py-20">
+    <section id="certificates" class="scroll-mt-24 py-20">
         <h2 class="mb-12 text-3xl font-bold">Certificates</h2>
         <div class="grid gap-6 md:grid-cols-2">
             {#each certificates as cert (cert.title)}
@@ -156,7 +156,7 @@
 
     <!-- Contact Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
-    <section id="contact" class="min-h-[70vh] py-20 pb-40">
+    <section id="contact" class="scroll-mt-24 min-h-[70vh] py-20 pb-40">
         <h2 class="mb-8 text-3xl font-bold">Get in Touch</h2>
         <div class="grid gap-12 md:grid-cols-2">
             <div>
