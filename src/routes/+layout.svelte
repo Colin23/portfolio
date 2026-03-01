@@ -1,24 +1,24 @@
 <script lang="ts">
     import "../app.css";
-    import { onMount } from "svelte";
-    import { page } from "$app/state";
-    import { browser } from "$app/environment";
+    import {onMount} from "svelte";
+    import {page} from "$app/state";
+    import {browser} from "$app/environment";
 
-    const { children } = $props();
+    const {children} = $props();
 
     let isMenuOpen = $state(false);
     let mobileMenuEl = $state<HTMLElement | null>(null);
     let menuToggleButtonEl = $state<HTMLButtonElement | null>(null);
 
     const navItems = [
-        { name: "About", id: "about" },
-        { name: "Technical Expertise", id: "skills" },
-        { name: "Professional Experience", id: "experience" },
-        { name: "Education", id: "education" },
-        { name: "Languages", id: "languages" },
-        { name: "Projects", id: "projects" },
-        { name: "Certificates", id: "certificates" },
-        { name: "Contact", id: "contact" }
+        {name: "About", id: "about"},
+        {name: "Technical Expertise", id: "skills"},
+        {name: "Professional Experience", id: "experience"},
+        {name: "Education", id: "education"},
+        {name: "Languages", id: "languages"},
+        {name: "Projects", id: "projects"},
+        {name: "Certificates", id: "certificates"},
+        {name: "Contact", id: "contact"}
     ];
 
     // Section tracked by intersection observer (home page only)
@@ -59,10 +59,57 @@
     });
 
     let observer: IntersectionObserver | undefined;
+    let rafId: number | undefined;
 
     /**
-     * Sets up the IntersectionObserver to track the active section during scroll.
-     * Only active on the home page.
+     * Updates active section based on which section top is closest to the header anchor line.
+     */
+    function updateActiveSectionByPosition(): void {
+        if (!browser || page.url.pathname !== "/") return;
+
+        const sections = navItems
+            .map(item => document.getElementById(item.id))
+            .filter((el): el is HTMLElement => el !== null);
+
+        if (sections.length === 0) return;
+
+        const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+        if (isAtBottom) {
+            scrollSection = "contact";
+            return;
+        }
+
+        const anchorY = 120;
+        let bestSectionId = sections[0].id;
+        let bestDistance = Number.POSITIVE_INFINITY;
+
+        for (const section of sections) {
+            const rect = section.getBoundingClientRect();
+            const distance = Math.abs(rect.top - anchorY);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                bestSectionId = section.id;
+            }
+        }
+
+        scrollSection = bestSectionId;
+    }
+
+    /**
+     * Schedules active-section update once per frame to avoid jitter on fast scroll.
+     */
+    function scheduleActiveSectionUpdate(): void {
+        if (!browser) return;
+        if (rafId !== undefined) return;
+
+        rafId = window.requestAnimationFrame(() => {
+            rafId = undefined;
+            updateActiveSectionByPosition();
+        });
+    }
+
+    /**
+     * Sets up observers/listeners to track active section.
      */
     function setupObserver(): void {
         if (!browser) return;
@@ -70,24 +117,12 @@
         observer?.disconnect();
 
         observer = new IntersectionObserver(
-            (entries): void => {
-                if (page.url.pathname !== "/") return;
-
-                const intersectingEntries = entries.filter(e => e.isIntersecting);
-                if (intersectingEntries.length > 0) {
-                    const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
-                    if (isAtBottom) {
-                        scrollSection = "contact";
-                        return;
-                    }
-
-                    intersectingEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-                    scrollSection = intersectingEntries[0].target.id;
-                }
+            () => {
+                scheduleActiveSectionUpdate();
             },
             {
-                threshold: [0.1, 0.5, 0.8, 1.0],
-                rootMargin: "-10% 0px -40% 0px"
+                threshold: [0, 1],
+                rootMargin: "-64px 0px -60% 0px"
             }
         );
 
@@ -95,6 +130,12 @@
             const el = document.getElementById(item.id);
             if (el) observer?.observe(el);
         });
+
+        window.removeEventListener("scroll", scheduleActiveSectionUpdate, {capture: false} as AddEventListenerOptions);
+        window.addEventListener("scroll", scheduleActiveSectionUpdate, {passive: true});
+
+        // Initialize immediately
+        scheduleActiveSectionUpdate();
     }
 
     onMount((): (() => void) => {
@@ -120,6 +161,13 @@
 
         return (): void => {
             observer?.disconnect();
+            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
+
+            if (rafId !== undefined) {
+                window.cancelAnimationFrame(rafId);
+                rafId = undefined;
+            }
+
             document.removeEventListener("click", handleDocumentClick, true);
         };
     });
