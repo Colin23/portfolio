@@ -31,6 +31,9 @@ jobs:
       - name: Lint
         run: bun run eslint
 
+      - name: Prettier check
+        run: bun run prettier
+
       - name: Unit tests
         run: bun run test:unit
 

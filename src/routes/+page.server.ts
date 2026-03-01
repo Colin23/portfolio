@@ -190,7 +190,13 @@ function parseSkills(content: string): Array<{ title: string; items: string[] }>
  * @returns {string} Profile summary text.
  */
 function parseProfile(content: string): string {
-    return content.split("\n").slice(1).join(" ").replace(/\s+/g, " ").trim();
+    return content
+        .split("\n")
+        .map(line => line.trim())
+        .filter((line, index) => !(index === 0 && line.startsWith("#")))
+        .join(" ")
+        .replaceAll(/\s+/g, " ")
+        .trim();
 }
 
 /**
@@ -219,8 +225,7 @@ function parseContact(content: string): {
         const match = line.match(/^- \*\*(.+?):\*\*\s*(.+)$/);
         if (!match) continue;
         const key = match[1].toLowerCase();
-        const value = match[2].replace(/\[(.*?)\]\((.*?)\)/g, "$2").trim();
-        fields[key] = value;
+        fields[key] = match[2].replaceAll(/\[(.*?)]\((.*?)\)/g, "$2").trim();
     }
 
     return {
