@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   generate-pdf:
@@ -48,7 +49,7 @@ jobs:
           cat preview.log
           exit 1
 
-      - name: Generate cv pdf
+      - name: Generate CV PDF
         run: bun run generate:cv-pdf
 
       - name: Stop preview server
@@ -56,14 +57,24 @@ jobs:
         run: |
           if [ -f preview.pid ]; then kill "$(cat preview.pid)" || true; fi
 
-      - name: Commit PDF if changed
+      - name: Check PDF changes
+        id: pdf_changes
         run: |
-          if [ -z "$(git status --porcelain -- static/colin-moerbe-cv.pdf)" ]; then
-            echo "No PDF changes."
-            exit 0
+          if [ -z "$(git status --porcelain -- static/colin-moerbe-cv.pdf static/*-colin-moerbe-cv.pdf)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add static/colin-moerbe-cv.pdf
-          git commit -m "chore: regenerate colin-moerbe-cv.pdf"
-          git push
+
+      - name: Create pull request for updated PDFs
+        if: steps.pdf_changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: regenerate CV PDFs"
+          title: "chore: regenerate CV PDFs"
+          body: "Automated update of stable and dated CV PDFs."
+          branch: "chore/update-cv-pdf"
+          delete-branch: true
+          add-paths: |
+            static/colin-moerbe-cv.pdf
+            static/*-colin-moerbe-cv.pdf
