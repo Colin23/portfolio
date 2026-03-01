@@ -9,3 +9,8 @@ node_modules/
 
 # Miscellaneous
 /static/
+
+
+### GH Actions ###
+.github/workflows/*.yml
+.github/workflows/*.yaml

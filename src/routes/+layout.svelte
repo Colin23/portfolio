@@ -7,6 +7,8 @@
     const { children } = $props();
 
     let isMenuOpen = $state(false);
+    let mobileMenuEl = $state<HTMLElement | null>(null);
+    let menuToggleButtonEl = $state<HTMLButtonElement | null>(null);
 
     const navItems = [
         { name: "About", id: "about" },
@@ -100,7 +102,26 @@
             setupObserver();
         }
 
-        return (): void => observer?.disconnect();
+        const handleDocumentClick = (event: MouseEvent): void => {
+            if (!isMenuOpen) return;
+
+            const target = event.target as Node | null;
+            if (!target) return;
+
+            const clickedInsideMenu = mobileMenuEl?.contains(target) ?? false;
+            const clickedToggle = menuToggleButtonEl?.contains(target) ?? false;
+
+            if (!clickedInsideMenu && !clickedToggle) {
+                closeMenu();
+            }
+        };
+
+        document.addEventListener("click", handleDocumentClick, true);
+
+        return (): void => {
+            observer?.disconnect();
+            document.removeEventListener("click", handleDocumentClick, true);
+        };
     });
 
     // Handle client-side navigation between routes
@@ -198,7 +219,11 @@
                     <span class="hidden dark:inline">🌞</span>
                     <span class="inline dark:hidden">🌙</span>
                 </button>
-                <button onclick={toggleMenu} class="p-2 text-gray-600 dark:text-gray-400" aria-label="Toggle Menu">
+                <button
+                    bind:this={menuToggleButtonEl}
+                    onclick={toggleMenu}
+                    class="p-2 text-gray-600 dark:text-gray-400"
+                    aria-label="Toggle Menu">
                     {#if isMenuOpen}
                         <span class="text-2xl">✕</span>
                     {:else}
@@ -208,7 +233,9 @@
             </div>
         </nav>
         {#if isMenuOpen}
-            <div class="border-t border-gray-200 bg-white p-4 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
+            <div
+                bind:this={mobileMenuEl}
+                class="relative z-50 max-h-[70vh] overflow-y-auto border-t border-gray-200 bg-white p-4 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
                 <div class="flex flex-col space-y-4">
                     {#each navItems as item (item.id)}
                         <a
@@ -225,7 +252,7 @@
                             closeMenu();
                             downloadCV();
                         }}
-                        class="rounded-lg bg-blue-600 px-4 py-3 text-center text-lg font-semibold text-white transition-all hover:bg-blue-700">
+                        class="self-start rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700">
                         Download CV
                     </button>
                 </div>
