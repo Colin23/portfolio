@@ -50,12 +50,12 @@
         </section>
 
         <section
-            class="prose mb-10 max-w-none prose-slate print:mb-8 prose-h1:mb-3 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-h3:mt-1 prose-h3:mb-0 prose-h3:text-base prose-h3:font-normal print:prose-p:text-black prose-strong:font-normal prose-ul:ml-6 prose-ul:list-disc prose-li:mb-1 print:prose-li:text-black">
+            class="prose mb-10 max-w-none prose-slate print:mb-8 prose-h1:mb-3 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-lg prose-h2:font-bold prose-h3:mt-1 prose-h3:mb-0 prose-h3:text-base prose-h3:font-normal print:prose-p:text-black prose-strong:font-normal prose-ul:ml-6 prose-ul:list-disc prose-li:mb-1 print:prose-li:text-black">
             <Experience />
         </section>
 
         <section
-            class="prose mb-10 max-w-none prose-slate print:mb-8 prose-h1:mb-3 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-h3:mt-1 prose-h3:mb-0 prose-h3:text-base prose-h3:font-normal print:prose-p:text-black prose-strong:font-normal prose-ul:ml-6 prose-ul:list-disc prose-li:mb-1 print:prose-li:text-black">
+            class="prose mb-10 max-w-none prose-slate print:mb-8 prose-h1:mb-3 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-lg prose-h2:font-bold prose-h3:mt-1 prose-h3:mb-0 prose-h3:text-base prose-h3:font-normal print:prose-p:text-black prose-strong:font-normal prose-ul:ml-6 prose-ul:list-disc prose-li:mb-1 print:prose-li:text-black">
             <Education />
         </section>
 
@@ -72,28 +72,29 @@
 
 <style>
     @media print {
-        @page {
-            margin: 0;
-        }
-
         :global(body) {
+            margin: 0;
             background: white !important;
             color: black !important;
-            margin: 0;
         }
 
+        /* Let Playwright page.pdf() control margins */
         .print-container {
-            padding: 2cm;
+            padding: 0;
         }
 
+        /* Avoid awkward section splits across pages */
         section {
             break-inside: avoid;
+            page-break-inside: avoid;
         }
 
+        /* Hide browser-added URL after links */
         a:after {
             content: "" !important;
         }
 
+        /* Ensure site chrome never appears in generated PDF */
         :global(header),
         :global(footer) {
             display: none !important;

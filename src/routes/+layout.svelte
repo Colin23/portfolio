@@ -118,30 +118,7 @@
      * Triggers the CV download by opening the /cv route in a hidden iframe and printing it.
      */
     function downloadCV(): void {
-        if (!browser) return;
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        iframe.src = "/cv";
-        document.body.appendChild(iframe);
-
-        iframe.onload = (): void => {
-            if (iframe.contentWindow) {
-                const win = iframe.contentWindow;
-                let cleaned = false;
-                const cleanup = (): void => {
-                    if (cleaned) return;
-                    cleaned = true;
-                    win.removeEventListener("afterprint", cleanup);
-                    if (iframe.parentNode) {
-                        document.body.removeChild(iframe);
-                    }
-                };
-                win.addEventListener("afterprint", cleanup);
-                win.print();
-                // Fallback if afterprint doesn't fire (60s timeout)
-                setTimeout(cleanup, 60000);
-            }
-        };
+        window.open("/colin-moerbe-cv.pdf", "_blank", "noopener,noreferrer");
     }
 
     /**

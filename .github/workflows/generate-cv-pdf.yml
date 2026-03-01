@@ -1,0 +1,69 @@
+name: Generate CV PDF
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Build site
+        run: bun run build
+
+      - name: Start preview server
+        run: |
+          bun run preview:ci > preview.log 2>&1 &
+          echo $! > preview.pid
+
+      - name: Wait for preview server
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:4173/cv/ > /dev/null; then
+              echo "Preview server is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Preview server did not start in time"
+          cat preview.log
+          exit 1
+
+      - name: Generate cv pdf
+        run: bun run generate:cv-pdf
+
+      - name: Stop preview server
+        if: always()
+        run: |
+          if [ -f preview.pid ]; then kill "$(cat preview.pid)" || true; fi
+
+      - name: Commit PDF if changed
+        run: |
+          if git diff --quiet -- static/colin-moerbe-cv.pdf; then
+            echo "No PDF changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add static/colin-moerbe-cv.pdf
+          git commit -m "chore: regenerate colin-moerbe-cv.pdf"
+          git push
