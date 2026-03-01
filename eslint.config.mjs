@@ -17,12 +17,15 @@ export default defineConfig(
         ignores: ["build/", ".svelte-kit/", "node_modules/"]
     },
     js.configs.recommended,
-    tseslint.configs.strict,
     ...svelte.configs.recommended,
     prettier,
     ...svelte.configs.prettier,
+
     {
-        languageOptions: { globals: { ...globals.browser, ...globals.node } },
+        languageOptions: {
+            globals: { ...globals.browser, ...globals.node }
+        },
+
         plugins: {
             jsdoc: jsdocPlugin
         },
@@ -30,21 +33,12 @@ export default defineConfig(
         rules: {
             "jsdoc/require-jsdoc": "error",
 
-            "@typescript-eslint/explicit-function-return-type": [
-                "error",
-                {
-                    allowExpressions: true
-                }
-            ],
-            "@typescript-eslint/no-explicit-any": "error",
+            "@typescript-eslint/explicit-function-return-type": "off",
+            "@typescript-eslint/no-explicit-any": "off",
 
-            // typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
-            // see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
             "no-undef": "off",
             "svelte/no-navigation-without-resolve": "off",
 
-            // Default rules, see https://eslint.org/docs/latest/rules/#possible-problems
-            // These rules are overridden. They were deactivated per default.
             "array-callback-return": "warn",
             "no-await-in-loop": "warn",
             "no-constructor-return": "warn",
@@ -58,8 +52,6 @@ export default defineConfig(
             "no-useless-assignment": "warn",
             "require-atomic-updates": "error",
 
-            // Suggested additional rules, see https://eslint.org/docs/latest/rules/#suggestions
-            // They were all deactivated per default.
             "block-scoped-var": "error",
             "camelcase": "error",
             "default-case": "error",
@@ -91,9 +83,22 @@ export default defineConfig(
             "require-await": "warn"
         }
     },
+
+    ...tseslint.configs.strict.map(config => ({
+        ...config,
+        files: ["**/*.ts", "**/*.tsx"]
+    })),
+
+    {
+        files: ["**/*.ts", "**/*.tsx"],
+        rules: {
+            "@typescript-eslint/explicit-function-return-type": ["error", { allowExpressions: true }],
+            "@typescript-eslint/no-explicit-any": "error"
+        }
+    },
+
     {
         files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
-
         languageOptions: {
             parserOptions: {
                 projectService: true,

@@ -69,7 +69,7 @@
                 href={github}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
                 >GitHub</a>
         {/if}
         {#if liveDemo}

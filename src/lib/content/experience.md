@@ -1,29 +1,37 @@
-# Work Experience
+# Professional Experience
 
-## Senior Software Engineer at Tech Corp
+## 09/2023 – Present
 
-_January 2022 – Present_
+### SSC-Services GmbH — Böblingen, Germany
 
-- Led the development of a high-throughput Java backend for processing millions of transactions.
-- Optimized database queries, reducing latency by 40%.
-- Mentored junior developers and improved code review processes.
-- Led the development of a high-throughput Java backend for processing millions of transactions.
-- Optimized database queries, reducing latency by 40%.
-- Mentored junior developers and improved code review processes.
-- Led the development of a high-throughput Java backend for processing millions of transactions.
-- Optimized database queries, reducing latency by 40%.
-- Mentored junior developers and improved code review processes.
+**Software Engineer**
 
-## Software Engineer at Startup Inc
+- Development and continuous improvement of a containerized microservice landscape (~15–20 services) in an
+  enterprise-scale system environment.
+- Analysis, design, and technical implementation of business requirements in close collaboration with the client.
+- Development of event- and workflow-based backend services for process automation.
+- Implementation of high-performance delta-load migration processes (>3 million records) using parallel processing.
+- Development of Kafka-based integration interfaces with high throughput.
+- Development, containerization, and operation of backend services on Kubernetes (Azure), as well as building AWS
+  infrastructure using CDK (Java).
+- Enhancement of CI/CD pipelines and sustainable reduction of recurring production issues through refactoring and
+  improved logging and monitoring strategies.
+- Led a company-wide learning initiative, including design and development of an internal tool to map learning paths and
+  competencies.
 
-_June 2019 – December 2021_
+## 11/2022 – 06/2023
 
-- Built RESTful APIs using Spring Boot.
-- Implemented automated CI/CD pipelines using GitHub Actions.
-- Scaled infrastructure to handle 10x growth in user base.
-- Built RESTful APIs using Spring Boot.
-- Implemented automated CI/CD pipelines using GitHub Actions.
-- Scaled infrastructure to handle 10x growth in user base.
-- Built RESTful APIs using Spring Boot.
-- Implemented automated CI/CD pipelines using GitHub Actions.
-- Scaled infrastructure to handle 10x growth in user base.
+### envite consulting GmbH — Stuttgart, Germany
+
+**Working Student DevOps Engineer**
+
+- Implementation of CI/CD pipelines.
+- Designed a methodology to estimate energy consumption of build and deployment pipelines.
+
+## 03/2022 – 08/2022
+
+### pronexon GmbH — Reutlingen, Germany
+
+**Intern, System Integration**
+
+- Designed and implemented server, storage, and backup solutions.
