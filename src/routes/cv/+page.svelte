@@ -1,61 +1,76 @@
 <script lang="ts">
     import Experience from "$lib/content/experience.md";
-    import Skills from "$lib/content/skills.md";
-    import Projects from "$lib/content/projects.md";
-    import Certificates from "$lib/content/certificates.md";
+    import Education from "$lib/content/education.md";
 
-    /**
-     * Triggers the browser's print dialog.
-     */
-    function handlePrint(): void {
-        window.print();
-    }
+    const { data } = $props();
 </script>
 
 <div class="print-container flex flex-col gap-8 pt-24 print:block print:pt-0">
     <div class="mx-auto flex w-full max-w-5xl flex-col px-4 md:px-8 print:hidden">
-        <div class="mb-4 flex flex-wrap items-center justify-end gap-2 sm:gap-4">
+        <div class="mb-4 flex flex-wrap items-center justify-start gap-2 sm:gap-4">
             <a
                 href="/"
                 class="rounded-lg border border-gray-200 px-4 py-2 transition-colors hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
                 Back to Portfolio
             </a>
-            <button
-                onclick={handlePrint}
-                class="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700">
-                Download PDF
-            </button>
         </div>
-        <h1 class="text-3xl font-bold md:text-4xl">Curriculum Vitae</h1>
     </div>
 
-    <div
-        class="mx-auto prose max-w-5xl px-4 prose-slate md:px-8 dark:prose-invert
-		print:max-w-none print:px-0 print:text-black print:prose-p:text-black print:prose-li:text-black">
+    <div class="mx-auto max-w-5xl px-4 md:px-8 print:max-w-none print:px-0 print:text-black">
+        <section class="mb-10 print:mb-8">
+            <h1 class="text-3xl font-extrabold">{data.contact.name}</h1>
+            <p class="mt-1 text-lg font-semibold">{data.contact.role}</p>
+            <p class="mt-2 text-sm text-gray-700 print:text-black">{data.contact.location}</p>
+            <p class="text-sm text-gray-700 print:text-black">{data.contact.phone} · {data.contact.email}</p>
+            <p class="text-sm text-gray-700 print:text-black">LinkedIn: {data.contact.linkedin}</p>
+            <p class="text-sm text-gray-700 print:text-black">GitHub: {data.contact.github}</p>
+        </section>
+
+        <section class="mb-10 print:mb-8">
+            <h2 class="mb-3 text-2xl font-bold">Profile</h2>
+            <p class="leading-relaxed text-gray-800 print:text-black">{data.profile}</p>
+        </section>
+
+        <section class="mb-10 print:mb-8">
+            <h2 class="mb-3 text-2xl font-bold">Technical Expertise</h2>
+            <div class="space-y-4">
+                {#each data.coreSkills as group (group.title)}
+                    <div>
+                        <h3 class="text-lg font-semibold">{group.title}</h3>
+                        <p class="mt-1 leading-relaxed text-gray-800 print:text-black">{group.items.join(", ")}</p>
+                    </div>
+                {/each}
+                {#if data.familiarity.length > 0}
+                    <div>
+                        <h3 class="text-lg font-semibold">Basic knowledge</h3>
+                        <p class="mt-1 leading-relaxed text-gray-800 print:text-black">{data.familiarity.join(", ")}</p>
+                    </div>
+                {/if}
+            </div>
+        </section>
+
         <section
-            class="mb-12 print:mb-8 prose-headings:font-bold prose-h1:hidden prose-h2:text-2xl prose-ul:ml-6 prose-ul:list-disc prose-li:mb-2">
+            class="prose mb-10 max-w-none prose-slate print:mb-8 prose-h1:mb-3 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-h3:mt-1 prose-h3:mb-0 prose-h3:text-base prose-h3:font-normal print:prose-p:text-black prose-strong:font-normal prose-ul:ml-6 prose-ul:list-disc prose-li:mb-1 print:prose-li:text-black">
             <Experience />
         </section>
 
         <section
-            class="mb-12 print:mb-8 prose-headings:font-bold prose-h1:hidden prose-h2:text-2xl prose-ul:ml-6 prose-ul:list-disc prose-li:mb-2">
-            <Skills />
+            class="prose mb-10 max-w-none prose-slate print:mb-8 prose-h1:mb-3 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-h2:font-bold prose-h3:mt-1 prose-h3:mb-0 prose-h3:text-base prose-h3:font-normal print:prose-p:text-black prose-strong:font-normal prose-ul:ml-6 prose-ul:list-disc prose-li:mb-1 print:prose-li:text-black">
+            <Education />
         </section>
 
-        <section
-            class="mb-12 print:mb-8 prose-headings:font-bold prose-h1:hidden prose-h2:text-2xl prose-ul:ml-6 prose-ul:list-disc prose-li:mb-2">
-            <Projects />
-        </section>
-
-        <section
-            class="mb-12 print:mb-8 prose-headings:font-bold prose-h1:hidden prose-h2:text-2xl prose-ul:ml-6 prose-ul:list-disc prose-li:mb-2">
-            <Certificates />
+        <section class="mb-10 print:mb-8">
+            <h2 class="mb-3 text-2xl font-bold">Languages</h2>
+            <div class="space-y-1">
+                {#each data.languages as language, i (i)}
+                    <p class="text-base text-gray-800 print:text-black">{language}</p>
+                {/each}
+            </div>
         </section>
     </div>
 </div>
 
 <style>
-    /* Print specific adjustments */
     @media print {
         @page {
             margin: 0;
@@ -75,12 +90,10 @@
             break-inside: avoid;
         }
 
-        /* Ensure links don't show URLs in print */
         a:after {
             content: "" !important;
         }
 
-        /* Hide unnecessary elements */
         :global(header),
         :global(footer) {
             display: none !important;

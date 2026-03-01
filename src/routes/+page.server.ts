@@ -7,61 +7,72 @@ export const load: PageServerLoad = () => {
     const skillsPath = path.resolve("src/lib/content/skills.md");
     const experiencePath = path.resolve("src/lib/content/experience.md");
     const certificatesPath = path.resolve("src/lib/content/certificates.md");
+    const profilePath = path.resolve("src/lib/content/profile.md");
+    const contactPath = path.resolve("src/lib/content/contact.md");
+    const educationPath = path.resolve("src/lib/content/education.md");
+    const languagesPath = path.resolve("src/lib/content/languages.md");
 
     const projectsContent = fs.readFileSync(projectsPath, "utf-8");
     const skillsContent = fs.readFileSync(skillsPath, "utf-8");
     const experienceContent = fs.readFileSync(experiencePath, "utf-8");
     const certificatesContent = fs.readFileSync(certificatesPath, "utf-8");
+    const profileContent = fs.readFileSync(profilePath, "utf-8");
+    const contactContent = fs.readFileSync(contactPath, "utf-8");
+    const educationContent = fs.readFileSync(educationPath, "utf-8");
+    const languagesContent = fs.readFileSync(languagesPath, "utf-8");
 
     const projects = parseProjects(projectsContent);
     const skills = parseSkills(skillsContent);
     const experience = parseExperience(experienceContent);
     const certificates = parseCertificates(certificatesContent);
+    const profile = parseProfile(profileContent);
+    const contact = parseContact(contactContent);
+    const education = parseEducation(educationContent);
+    const languages = parseLanguages(languagesContent);
 
     return {
         projects,
         skills,
         experience,
-        certificates
+        certificates,
+        profile,
+        contact,
+        education,
+        languages
     };
 };
 
 /**
- * Parses the work experience Markdown content.
- *
- * @param {string} content - The raw Markdown content from experience.md.
- * @returns {Array<{title: string, period: string, content: string}>} Array of experience objects.
+ * Parses the work experience Markdown content in date-first format:
+ * ## Date
+ * ### Company — Location
+ * **Role**
+ * - Bullet
  */
-function parseExperience(content: string): Array<{ title: string; period: string; content: string }> {
-    // Split content by H2 headers (## Title)
+function parseExperience(content: string): Array<{ title: string; period: string; role: string; content: string }> {
     const sections = content.split(/^## /m).slice(1);
+
     return sections.map(section => {
-        const lines = section.split("\n");
-        const title = lines[0].trim();
-        // Look for the date/period line which is wrapped in underscores (e.g., _January 2022 – Present_)
-        const dateLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
-        const period = dateLine ? dateLine.replaceAll("_", "").trim() : "";
-
-        const dateIndex = dateLine ? lines.indexOf(dateLine) : -1;
-        const contentStart = dateIndex >= 0 ? dateIndex + 1 : 1;
-        const rawContent = lines.slice(contentStart).join("\n").trim();
-
-        // Convert simple Markdown list items to HTML list items
-        const htmlContent = rawContent
+        const lines = section
             .split("\n")
-            .map(line => {
-                if (line.startsWith("- ")) {
-                    return `<li>${line.substring(2)}</li>`;
-                }
-                return line;
-            })
-            .join("\n");
+            .map(line => line.trim())
+            .filter(Boolean);
+
+        const period = lines[0] ?? "";
+        const titleLine = lines.find(line => line.startsWith("### ")) ?? "";
+        const title = titleLine.replace(/^###\s+/, "").trim();
+
+        const roleLine = lines.find(line => line.startsWith("**") && line.endsWith("**")) ?? "";
+        const role = roleLine.replaceAll("**", "").trim();
+
+        const listItems = lines.filter(line => line.startsWith("- "));
+        const htmlContent = listItems.map(line => `<li>${line.substring(2).trim()}</li>`).join("\n");
 
         return {
             title,
             period,
-            // Wrap in <ul> if list items were found
-            content: htmlContent.includes("<li>") ? `<ul>${htmlContent}</ul>` : htmlContent
+            role,
+            content: htmlContent ? `<ul>${htmlContent}</ul>` : ""
         };
     });
 }
@@ -156,12 +167,10 @@ function parseProjects(content: string): Array<{
  * @returns {Array<{title: string, items: string[]}>} Array of skill categories.
  */
 function parseSkills(content: string): Array<{ title: string; items: string[] }> {
-    // Split content by H2 headers (## Category)
     const sections = content.split(/^## /m).slice(1);
     return sections.map(section => {
         const lines = section.split("\n");
         const title = lines[0].trim();
-        // Extract bullet points (- Skill Name) and remove bold markers (**)
         const items = lines
             .slice(1)
             .filter(l => l.startsWith("- "))
@@ -172,4 +181,95 @@ function parseSkills(content: string): Array<{ title: string; items: string[] }>
             items
         };
     });
+}
+
+/**
+ * Parses the profile markdown content.
+ *
+ * @param {string} content - The raw Markdown content from profile.md.
+ * @returns {string} Profile summary text.
+ */
+function parseProfile(content: string): string {
+    return content.split("\n").slice(1).join(" ").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Parses the contact markdown content.
+ *
+ * @param {string} content - The raw Markdown content from contact.md.
+ * @returns {{name?: string; role?: string; location?: string; phone?: string; email?: string; linkedin?: string; github?: string}} Contact fields.
+ */
+function parseContact(content: string): {
+    name?: string;
+    role?: string;
+    location?: string;
+    phone?: string;
+    email?: string;
+    linkedin?: string;
+    github?: string;
+} {
+    const lines = content
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line.startsWith("- **"));
+
+    const fields: Record<string, string> = {};
+
+    for (const line of lines) {
+        const match = line.match(/^- \*\*(.+?):\*\*\s*(.+)$/);
+        if (!match) continue;
+        const key = match[1].toLowerCase();
+        const value = match[2].replace(/\[(.*?)\]\((.*?)\)/g, "$2").trim();
+        fields[key] = value;
+    }
+
+    return {
+        name: fields.name,
+        role: fields.role,
+        location: fields.location,
+        phone: fields.phone,
+        email: fields.email,
+        linkedin: fields.linkedin,
+        github: fields.github
+    };
+}
+
+/**
+ * Parses the education markdown content.
+ *
+ * @param {string} content - The raw Markdown content from education.md.
+ * @returns {Array<{institution: string; degree: string; period: string}>} Array of education entries.
+ */
+function parseEducation(content: string): Array<{ institution: string; degree: string; period: string }> {
+    const sections = content.split(/^## /m).slice(1);
+
+    return sections.map(section => {
+        const lines = section
+            .split("\n")
+            .map(line => line.trim())
+            .filter(Boolean);
+
+        const period = lines[0] ?? "";
+        const institutionLine = lines.find(line => line.startsWith("### ")) ?? "";
+        const institution = institutionLine.replace(/^###\s+/, "").trim();
+
+        const degreeLine = lines.find(line => line.startsWith("**") && line.endsWith("**")) ?? "";
+        const degree = degreeLine.replaceAll("**", "").trim();
+
+        return { institution, degree, period };
+    });
+}
+
+/**
+ * Parses the languages markdown content.
+ *
+ * @param {string} content - The raw Markdown content from languages.md.
+ * @returns {string[]} Array of language entries.
+ */
+function parseLanguages(content: string): string[] {
+    return content
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line.startsWith("- "))
+        .map(line => line.substring(2).trim());
 }

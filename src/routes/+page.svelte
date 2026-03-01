@@ -4,10 +4,36 @@
     import ProjectCard from "$lib/components/ProjectCard.svelte";
 
     const { data } = $props();
+    const profile = $derived(data.profile);
+    const contact = $derived(data.contact);
     const skills = $derived(data.skills);
     const projects = $derived(data.projects);
     const experience = $derived(data.experience);
     const certificates = $derived(data.certificates);
+    const education = $derived(data.education);
+    const languages = $derived(data.languages);
+
+    const coreSkillGroups = $derived(
+        skills.filter(
+            (group: { title: string }) =>
+                group.title !== "Working Knowledge" &&
+                group.title !== "Familiarity" &&
+                group.title !== "Additional Technologies" &&
+                group.title !== "Basic knowledge"
+        )
+    );
+
+    const familiarityItems = $derived(
+        skills
+            .filter(
+                (group: { title: string; items: string[] }) =>
+                    group.title === "Working Knowledge" ||
+                    group.title === "Familiarity" ||
+                    group.title === "Additional Technologies" ||
+                    group.title === "Basic knowledge"
+            )
+            .flatMap((group: { items: string[] }) => group.items)
+    );
 </script>
 
 <svelte:head>
@@ -20,10 +46,7 @@
         <h1 class="mb-6 text-5xl font-extrabold tracking-tight md:text-7xl">
             Hi, I'm <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
         </h1>
-        <p class="max-w-2xl text-xl leading-relaxed text-gray-600 md:text-2xl dark:text-gray-300">
-            A Java Backend Developer with a passion for building robust, scalable, and elegant systems. This portfolio
-            is my single source of truth for my professional journey.
-        </p>
+        <p class="max-w-2xl text-xl leading-relaxed text-gray-600 md:text-2xl dark:text-gray-300">{profile}</p>
         <div class="mt-10 flex gap-4">
             <a
                 href="#contact"
@@ -38,23 +61,13 @@
         </div>
     </section>
 
-    <!-- Experience Section -->
-    <hr class="border-gray-100 dark:border-slate-800" />
-    <section id="experience" class="py-20">
-        <h2 class="mb-12 text-3xl font-bold">Experience</h2>
-        <div class="space-y-6">
-            {#each experience as exp (exp.title)}
-                <ExperienceCard {...exp} />
-            {/each}
-        </div>
-    </section>
-
     <!-- Skills Section -->
     <hr class="border-gray-100 dark:border-slate-800" />
     <section id="skills" class="py-20">
-        <h2 class="mb-12 text-3xl font-bold">Skills</h2>
+        <h2 class="mb-12 text-3xl font-bold">Technical Expertise</h2>
+
         <div class="grid gap-6 md:grid-cols-2">
-            {#each skills as skillGroup (skillGroup.title)}
+            {#each coreSkillGroups as skillGroup (skillGroup.title)}
                 <div
                     class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
                     <h3 class="mb-4 text-lg font-bold text-blue-600 dark:text-blue-400">{skillGroup.title}</h3>
@@ -67,6 +80,54 @@
                         {/each}
                     </div>
                 </div>
+            {/each}
+        </div>
+
+        {#if familiarityItems.length > 0}
+            <div
+                class="mt-8 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 dark:border-zinc-700 dark:bg-zinc-900/30">
+                <h3 class="mb-3 text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-zinc-400">
+                    Basic knowledge
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-zinc-400">{familiarityItems.join(" · ")}</p>
+            </div>
+        {/if}
+    </section>
+
+    <!-- Experience Section -->
+    <hr class="border-gray-100 dark:border-slate-800" />
+    <section id="experience" class="py-20">
+        <h2 class="mb-12 text-3xl font-bold">Professional Experience</h2>
+        <div class="space-y-6">
+            {#each experience as exp (exp.title)}
+                <ExperienceCard {...exp} />
+            {/each}
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <hr class="border-gray-100 dark:border-zinc-800" />
+    <section id="education" class="py-20">
+        <h2 class="mb-12 text-3xl font-bold">Education</h2>
+        <div class="space-y-6">
+            {#each education as edu (edu.institution)}
+                <article
+                    class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                    <p class="text-xl font-bold text-gray-900 dark:text-gray-100">{edu.period}</p>
+                    <h3 class="mt-2 text-base font-medium text-gray-700 dark:text-zinc-300">{edu.institution}</h3>
+                    <p class="mt-1 text-base font-medium text-gray-700 dark:text-zinc-300">{edu.degree}</p>
+                </article>
+            {/each}
+        </div>
+    </section>
+
+    <!-- Languages Section -->
+    <hr class="border-gray-100 dark:border-zinc-800" />
+    <section id="languages" class="py-20">
+        <h2 class="mb-12 text-3xl font-bold">Languages</h2>
+        <div class="space-y-2">
+            {#each languages as language, i (i)}
+                <p class="text-base text-gray-700 dark:text-zinc-300">{language}</p>
             {/each}
         </div>
     </section>
@@ -101,18 +162,40 @@
             <div>
                 <p class="mb-6 text-lg text-gray-600 dark:text-gray-400">
                     I'm always open to discussing new projects, creative ideas, or opportunities to be part of your
-                    visions.
+                    vision.
                 </p>
                 <ul class="space-y-4">
                     <li class="flex items-center gap-3">
                         <span class="text-xl">📧</span>
-                        <a href="mailto:contact@example.com" class="hover:text-blue-600 dark:hover:text-blue-400">
-                            contact@example.com
+                        <a
+                            href={"mailto:" + (contact.email ?? "")}
+                            class="hover:text-blue-600 dark:hover:text-blue-400">
+                            {contact.email}
                         </a>
                     </li>
                     <li class="flex items-center gap-3">
                         <span class="text-xl">📍</span>
-                        <span>Germany</span>
+                        <span>{contact.location}</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="text-xl">🔗</span>
+                        <a
+                            href={"https://" + (contact.linkedin ?? "")}
+                            target="_blank"
+                            rel="noreferrer"
+                            class="hover:text-blue-600 dark:hover:text-blue-400">
+                            LinkedIn
+                        </a>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="text-xl">💻</span>
+                        <a
+                            href={"https://" + (contact.github ?? "")}
+                            target="_blank"
+                            rel="noreferrer"
+                            class="hover:text-blue-600 dark:hover:text-blue-400">
+                            GitHub
+                        </a>
                     </li>
                 </ul>
             </div>

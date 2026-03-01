@@ -10,8 +10,10 @@
 
     const navItems = [
         { name: "About", id: "about" },
-        { name: "Experience", id: "experience" },
-        { name: "Skills", id: "skills" },
+        { name: "Technical Expertise", id: "skills" },
+        { name: "Professional Experience", id: "experience" },
+        { name: "Education", id: "education" },
+        { name: "Languages", id: "languages" },
         { name: "Projects", id: "projects" },
         { name: "Certificates", id: "certificates" },
         { name: "Contact", id: "contact" }
@@ -71,14 +73,12 @@
 
                 const intersectingEntries = entries.filter(e => e.isIntersecting);
                 if (intersectingEntries.length > 0) {
-                    // If we are at the very bottom of the page, force "contact"
                     const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
                     if (isAtBottom) {
                         scrollSection = "contact";
                         return;
                     }
 
-                    // Sort by how much is intersecting to find the most prominent section
                     intersectingEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
                     scrollSection = intersectingEntries[0].target.id;
                 }
@@ -96,7 +96,6 @@
     }
 
     onMount((): (() => void) => {
-        // Setup observer immediately if on home page
         if (page.url.pathname === "/") {
             setupObserver();
         }
@@ -178,17 +177,16 @@
     }
 </script>
 
-<!-- Rest of your template stays exactly the same -->
 <div
     class="min-h-screen bg-white font-sans text-gray-900 antialiased transition-colors duration-300 dark:bg-zinc-950 dark:text-gray-100">
     <header
         class="fixed top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/80 print:hidden">
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
-            <a href="/#about" class="text-xl font-bold tracking-tight" onclick={() => handleNavClick("about")}>
+            <a href="/#about" class="mr-6 text-xl font-bold tracking-tight" onclick={() => handleNavClick("about")}>
                 Portfolio
             </a>
             <!-- Desktop Nav -->
-            <div class="hidden items-center space-x-6 md:flex">
+            <div class="hidden items-center space-x-6 lg:flex">
                 {#each navItems as item (item.id)}
                     <a
                         href="/#{item.id}"
@@ -206,7 +204,6 @@
                     class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md">
                     Download CV
                 </button>
-                <!-- Theme Toggle -->
                 <button
                     onclick={toggleTheme}
                     class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900"
@@ -216,7 +213,7 @@
                 </button>
             </div>
             <!-- Mobile -->
-            <div class="flex items-center space-x-4 md:hidden">
+            <div class="flex items-center space-x-4 lg:hidden">
                 <button
                     onclick={toggleTheme}
                     class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900"
@@ -234,7 +231,7 @@
             </div>
         </nav>
         {#if isMenuOpen}
-            <div class="border-t border-gray-200 bg-white p-4 md:hidden dark:border-zinc-800 dark:bg-zinc-950">
+            <div class="border-t border-gray-200 bg-white p-4 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
                 <div class="flex flex-col space-y-4">
                     {#each navItems as item (item.id)}
                         <a

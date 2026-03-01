@@ -1,41 +1,41 @@
-# Skills
+# Technical Expertise
 
 ## Backend
 
-- **Java** (Expert)
-- **Spring Boot** (Advanced)
-- **Node.js** (Intermediate)
-- **PostgreSQL** (Advanced)
+- Java (21/25)
+- Spring Boot
+- Hibernate
+- REST
+- Event-Driven Architecture
+- Workflow Systems
 
-## Frontend
+## Cloud & Infrastructure
 
-- **Tailwind CSS** (Intermediate)
-- **Svelte / SvelteKit** (Beginner)
-- **TypeScript** (Intermediate)
+- Docker
+- Kubernetes
+- AWS (CDK, Fargate, EC2, S3, Secrets Manager)
+- Azure (Azure Container Registry, Artifact Feeds)
 
-## Tools
+## Data & Messaging
 
-- **Docker**
-- **Kubernetes**
-- **GitHub Actions**
-- **Bun**
+- PostgreSQL
+- JPA
+- Liquibase
+- Kafka
 
-## asdf
+## CI/CD & DevOps
 
-- **Docker**
-- **Kubernetes**
-- **GitHub Actions**
-- **Bun**
-- **Bun**
-- **Bun**
-- **Bun**
-- **Bun**
-- **Bun**
-- **Bun**
+- GitLab CI
+- GitHub Actions
+- Terraform
+- ArgoCD
 
-## sdfg
+## Basic knowledge
 
-- **Docker**
-- **Kubernetes**
-- **GitHub Actions**
-- **Bun**
+- Kotlin
+- Python
+- Go
+- Prometheus
+- Grafana
+- JavaScript/TypeScript
+- Vue
