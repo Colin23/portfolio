@@ -1,27 +1,25 @@
 <script lang="ts">
     import "../app.css";
-    import {onMount} from "svelte";
-    import {page} from "$app/state";
-    import {browser} from "$app/environment";
+    import { onMount } from "svelte";
+    import { page } from "$app/state";
+    import { browser } from "$app/environment";
 
-    const {children} = $props();
+    const { children } = $props();
 
     let isMenuOpen = $state(false);
     let mobileMenuEl = $state<HTMLElement | null>(null);
     let menuToggleButtonEl = $state<HTMLButtonElement | null>(null);
 
     const navItems = [
-        {name: "About", id: "about"},
-        {name: "Technical Expertise", id: "skills"},
-        {name: "Professional Experience", id: "experience"},
-        {name: "Education", id: "education"},
-        {name: "Languages", id: "languages"},
-        {name: "Projects", id: "projects"},
-        {name: "Certificates", id: "certificates"},
-        {name: "Contact", id: "contact"}
+        { name: "Tech Stack", id: "skills" },
+        { name: "Experience", id: "experience" },
+        { name: "Education", id: "education" },
+        { name: "Languages", id: "languages" },
+        { name: "Projects", id: "projects" },
+        { name: "Certificates", id: "certificates" },
+        { name: "Contact", id: "contact" }
     ];
 
-    // Section tracked by intersection observer (home page only)
     let scrollSection = $state("");
 
     // Initialize state before first paint on client
@@ -36,14 +34,15 @@
         if (isValidHash) {
             scrollSection = hash;
         } else if (!scrollSection) {
-            // Check scroll position if no hash
             const sections = navItems
                 .map(item => document.getElementById(item.id))
                 .filter((el): el is HTMLElement => el !== null);
-            let currentSection = "about";
+
+            const anchorY = 120;
+            let currentSection = "";
             for (const section of sections) {
                 const rect = section.getBoundingClientRect();
-                if (rect.top <= 120) {
+                if (rect.top <= anchorY) {
                     currentSection = section.id;
                 }
             }
@@ -76,6 +75,12 @@
         const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
         if (isAtBottom) {
             scrollSection = "contact";
+            return;
+        }
+
+        // Keep no active nav item while user is still in the hero/about region.
+        if (window.scrollY < 120) {
+            scrollSection = "";
             return;
         }
 
@@ -131,8 +136,10 @@
             if (el) observer?.observe(el);
         });
 
-        window.removeEventListener("scroll", scheduleActiveSectionUpdate, {capture: false} as AddEventListenerOptions);
-        window.addEventListener("scroll", scheduleActiveSectionUpdate, {passive: true});
+        window.removeEventListener("scroll", scheduleActiveSectionUpdate, {
+            capture: false
+        } as AddEventListenerOptions);
+        window.addEventListener("scroll", scheduleActiveSectionUpdate, { passive: true });
 
         // Initialize immediately
         scheduleActiveSectionUpdate();
@@ -228,18 +235,16 @@
     <header
         class="fixed top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/80 print:hidden">
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
-            <a href="/#about" class="mr-6 text-xl font-bold tracking-tight" onclick={() => handleNavClick("about")}>
-                Portfolio
-            </a>
+            <a href="/" class="mr-6 text-xl font-bold tracking-tight" onclick={closeMenu}> Portfolio </a>
             <!-- Desktop Nav -->
-            <div class="hidden items-center space-x-6 lg:flex">
+            <div class="hidden items-center gap-6 lg:flex">
                 {#each navItems as item (item.id)}
                     <a
                         href="/#{item.id}"
                         onclick={() => handleNavClick(item.id)}
-                        class="text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 {activeSection ===
+                        class="flex h-10 items-center text-center text-sm leading-tight font-semibold transition-colors hover:text-blue-600 dark:hover:text-blue-400 {activeSection ===
                         item.id
-                            ? 'font-bold text-blue-600 dark:text-blue-400'
+                            ? 'text-blue-600 dark:text-blue-400'
                             : 'text-gray-600 dark:text-zinc-400'}">
                         {item.name}
                     </a>
@@ -289,8 +294,8 @@
                         <a
                             href="/#{item.id}"
                             onclick={() => handleNavClick(item.id)}
-                            class="text-lg font-medium {activeSection === item.id
-                                ? 'font-bold text-blue-600 dark:text-blue-400'
+                            class="text-lg font-semibold {activeSection === item.id
+                                ? 'text-blue-600 dark:text-blue-400'
                                 : 'text-gray-600 dark:text-zinc-400'}">
                             {item.name}
                         </a>

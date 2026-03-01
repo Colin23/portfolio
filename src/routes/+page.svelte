@@ -42,7 +42,7 @@
 
 <div class="mx-auto max-w-5xl px-4 py-8 md:px-8">
     <!-- About Section (Hero) -->
-    <section id="about" class="scroll-mt-24 flex min-h-[70vh] flex-col justify-center py-20">
+    <section id="about" class="flex min-h-[70vh] scroll-mt-24 flex-col justify-center py-20">
         <h1 class="mb-6 text-5xl font-extrabold tracking-tight md:text-7xl">
             Hi, I'm <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
         </h1>
@@ -156,7 +156,7 @@
 
     <!-- Contact Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
-    <section id="contact" class="scroll-mt-24 min-h-[70vh] py-20 pb-40">
+    <section id="contact" class="min-h-[70vh] scroll-mt-24 py-20 pb-40">
         <h2 class="mb-8 text-3xl font-bold">Get in Touch</h2>
         <div class="grid gap-12 md:grid-cols-2">
             <div>
