@@ -13,7 +13,9 @@
 
     let modalEl: HTMLDivElement | undefined = $state(undefined);
 
-    // Move modal element to body when it appears (portal pattern)
+    // Move modal element to body when it appears (portal pattern).
+    // This intentionally manipulates the DOM to avoid clipping/stacking issues in nested containers
+    // and to ensure consistent fullscreen backdrop/scroll locking behavior.
     $effect(() => {
         if (!browser || !modalEl) return;
         document.body.appendChild(modalEl);

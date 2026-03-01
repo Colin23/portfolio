@@ -16,6 +16,23 @@ This repository contains my personal portfolio.
 - **Runtime:** Bun
 - **Hosting:** Netlify
 
+## ✅ Quality Checks
+
+Run all checks locally before pushing:
+
+```bash
+bun run check && bun run eslint && bun run test:unit && bun run build
+```
+
+CI runs automatically:
+- on pull requests targeting `main`
+- on pushes to `main`
+
+## 🔎 SEO & Crawling
+
+- `static/robots.txt` allows crawling and points to the sitemap.
+- `static/sitemap.xml` lists indexable site routes.
+
 ## 📄 Documentation
 
 - [Setup & Development Guide](docs/setup.md)

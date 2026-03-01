@@ -6,6 +6,12 @@
 
     const { children } = $props();
 
+    const siteUrl = "https://colinmoerbe.com";
+    const siteTitle = "Colin Mörbe | Portfolio";
+    const siteDescription =
+        "Software engineer portfolio featuring experience, projects, skills, certificates, and downloadable CV.";
+    const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`);
+
     let isMenuOpen = $state(false);
     let mobileMenuEl = $state<HTMLElement | null>(null);
     let menuToggleButtonEl = $state<HTMLButtonElement | null>(null);
@@ -230,19 +236,44 @@
     }
 </script>
 
+<svelte:head>
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={`${siteUrl}/favicon.svg`} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={siteDescription} />
+</svelte:head>
+
+<a
+    href="#main-content"
+    class="sr-only z-[60] rounded bg-blue-600 px-3 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus-visible:ring-2 focus-visible:ring-blue-400">
+    Skip to content
+</a>
+
 <div
     class="min-h-screen bg-white font-sans text-gray-900 antialiased transition-colors duration-300 dark:bg-zinc-950 dark:text-gray-100">
     <header
         class="fixed top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/80 print:hidden">
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
-            <a href="/" class="mr-6 text-xl font-bold tracking-tight" onclick={closeMenu}> Portfolio </a>
+            <a
+                href="/"
+                class="mr-6 text-xl font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                onclick={closeMenu}>
+                Portfolio
+            </a>
             <!-- Desktop Nav -->
             <div class="hidden items-center gap-6 lg:flex">
                 {#each navItems as item (item.id)}
                     <a
                         href="/#{item.id}"
                         onclick={() => handleNavClick(item.id)}
-                        class="flex h-10 items-center text-center text-sm leading-tight font-semibold transition-colors hover:text-blue-600 dark:hover:text-blue-400 {activeSection ===
+                        class="flex h-10 items-center text-center text-sm leading-tight font-semibold transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:text-blue-400 {activeSection ===
                         item.id
                             ? 'text-blue-600 dark:text-blue-400'
                             : 'text-gray-600 dark:text-zinc-400'}">
@@ -252,12 +283,12 @@
                 <div class="h-4 w-px bg-gray-200 dark:bg-zinc-800"></div>
                 <button
                     onclick={downloadCV}
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md">
+                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
                     Download CV
                 </button>
                 <button
                     onclick={toggleTheme}
-                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900"
+                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-zinc-900"
                     aria-label="Toggle Dark Mode">
                     <span class="hidden text-xl dark:inline">🌞</span>
                     <span class="inline text-xl dark:hidden">🌙</span>
@@ -267,7 +298,7 @@
             <div class="flex items-center space-x-4 lg:hidden">
                 <button
                     onclick={toggleTheme}
-                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900"
+                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-zinc-900"
                     aria-label="Toggle Dark Mode">
                     <span class="hidden dark:inline">🌞</span>
                     <span class="inline dark:hidden">🌙</span>
@@ -275,8 +306,10 @@
                 <button
                     bind:this={menuToggleButtonEl}
                     onclick={toggleMenu}
-                    class="p-2 text-gray-600 dark:text-gray-400"
-                    aria-label="Toggle Menu">
+                    class="p-2 text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400"
+                    aria-label="Toggle Menu"
+                    aria-controls="mobile-navigation"
+                    aria-expanded={isMenuOpen}>
                     {#if isMenuOpen}
                         <span class="text-2xl">✕</span>
                     {:else}
@@ -287,6 +320,7 @@
         </nav>
         {#if isMenuOpen}
             <div
+                id="mobile-navigation"
                 bind:this={mobileMenuEl}
                 class="relative z-50 max-h-[70vh] overflow-y-auto border-t border-gray-200 bg-white p-4 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
                 <div class="flex flex-col space-y-4">
@@ -294,7 +328,8 @@
                         <a
                             href="/#{item.id}"
                             onclick={() => handleNavClick(item.id)}
-                            class="text-lg font-semibold {activeSection === item.id
+                            class="text-lg font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {activeSection ===
+                            item.id
                                 ? 'text-blue-600 dark:text-blue-400'
                                 : 'text-gray-600 dark:text-zinc-400'}">
                             {item.name}
@@ -305,14 +340,14 @@
                             closeMenu();
                             downloadCV();
                         }}
-                        class="self-start rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700">
+                        class="self-start rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
                         Download CV
                     </button>
                 </div>
             </div>
         {/if}
     </header>
-    <main class="pt-16">
+    <main id="main-content" class="pt-16">
         {@render children()}
     </main>
     <footer
