@@ -18,6 +18,7 @@
         if (!browser || !modalEl) return;
         document.body.appendChild(modalEl);
         return () => {
+            // eslint-disable-next-line svelte/no-dom-manipulating
             modalEl?.remove();
         };
     });
