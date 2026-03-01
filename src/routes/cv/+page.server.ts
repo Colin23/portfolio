@@ -1,4 +1,4 @@
-import type { PageServerLoad } from "./$types";
+import type {PageServerLoad} from "./$types";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -29,8 +29,7 @@ function parseContact(content: string): {
         const match = line.match(/^- \*\*(.+?):\*\*\s*(.+)$/);
         if (!match) continue;
         const key = match[1].toLowerCase();
-        const value = match[2].replace(/\[(.*?)\]\((.*?)\)/g, "$2").trim();
-        fields[key] = value;
+        fields[key] = match[2].replaceAll(/\[(.*?)]\((.*?)\)/g, "$2").trim();
     }
 
     return {
@@ -51,7 +50,13 @@ function parseContact(content: string): {
  * @returns {string} Profile summary text.
  */
 function parseProfile(content: string): string {
-    return content.split("\n").slice(1).join(" ").replace(/\s+/g, " ").trim();
+    return content
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line.length > 0 && !line.startsWith("#"))
+        .join(" ")
+        .replaceAll(/\s+/g, " ")
+        .trim();
 }
 
 /**
@@ -86,7 +91,7 @@ function parseLanguages(content: string): string[] {
 }
 
 /**
- * Parses languages markdown into array of entries.
+ * Loads and derives data required for rendering the CV route.
  */
 export const load: PageServerLoad = () => {
     const contactPath = path.resolve("src/lib/content/contact.md");

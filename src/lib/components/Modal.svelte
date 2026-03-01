@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {type Snippet} from "svelte";
-    import {browser} from "$app/environment";
+    import { type Snippet } from "svelte";
+    import { browser } from "$app/environment";
 
     interface Props {
         show: boolean;
@@ -9,9 +9,11 @@
         children: Snippet;
     }
 
-    const {show, title, onClose, children}: Props = $props();
+    const { show, title, onClose, children }: Props = $props();
 
     let modalEl: HTMLDivElement | undefined = $state(undefined);
+    let previousBodyOverflow = $state<string | null>(null);
+    let previousBodyPaddingRight = $state<string | null>(null);
 
     // Move modal element to body when it appears (portal pattern).
     // This intentionally manipulates the DOM to avoid clipping/stacking issues in nested containers
@@ -44,15 +46,17 @@
         if (!browser) return;
         if (show) {
             const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            previousBodyOverflow = document.body.style.overflow;
+            previousBodyPaddingRight = document.body.style.paddingRight;
             document.body.style.overflow = "hidden";
             document.body.style.paddingRight = `${scrollbarWidth}px`;
         } else {
-            document.body.style.overflow = "unset";
-            document.body.style.paddingRight = "";
+            document.body.style.overflow = previousBodyOverflow ?? "";
+            document.body.style.paddingRight = previousBodyPaddingRight ?? "";
         }
         return (): void => {
-            document.body.style.overflow = "unset";
-            document.body.style.paddingRight = "";
+            document.body.style.overflow = previousBodyOverflow ?? "";
+            document.body.style.paddingRight = previousBodyPaddingRight ?? "";
         };
     });
 </script>

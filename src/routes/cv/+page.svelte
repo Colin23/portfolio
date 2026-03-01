@@ -18,12 +18,14 @@
 
     <div class="mx-auto max-w-5xl px-4 md:px-8 print:max-w-none print:px-0 print:text-black">
         <section class="mb-10 print:mb-8">
-            <h1 class="text-3xl font-extrabold">{data.contact.name}</h1>
-            <p class="mt-1 text-lg font-semibold">{data.contact.role}</p>
-            <p class="mt-2 text-sm text-gray-700 print:text-black">{data.contact.location}</p>
-            <p class="text-sm text-gray-700 print:text-black">{data.contact.phone} · {data.contact.email}</p>
-            <p class="text-sm text-gray-700 print:text-black">LinkedIn: {data.contact.linkedin}</p>
-            <p class="text-sm text-gray-700 print:text-black">GitHub: {data.contact.github}</p>
+            <h1 class="text-3xl font-extrabold">{data.contact.name ?? ""}</h1>
+            <p class="mt-1 text-lg font-semibold">{data.contact.role ?? ""}</p>
+            <p class="mt-2 text-sm text-gray-700 print:text-black">{data.contact.location ?? ""}</p>
+            <p class="text-sm text-gray-700 print:text-black">
+                {data.contact.phone ?? ""} · {data.contact.email ?? ""}
+            </p>
+            <p class="text-sm text-gray-700 print:text-black">LinkedIn: {data.contact.linkedin ?? ""}</p>
+            <p class="text-sm text-gray-700 print:text-black">GitHub: {data.contact.github ?? ""}</p>
         </section>
 
         <section class="mb-10 print:mb-8">
@@ -78,23 +80,19 @@
             color: black !important;
         }
 
-        /* Let Playwright page.pdf() control margins */
         .print-container {
             padding: 0;
         }
 
-        /* Avoid awkward section splits across pages */
         section {
             break-inside: avoid;
             page-break-inside: avoid;
         }
 
-        /* Hide browser-added URL after links */
         a:after {
             content: "" !important;
         }
 
-        /* Ensure site chrome never appears in generated PDF */
         :global(header),
         :global(footer) {
             display: none !important;

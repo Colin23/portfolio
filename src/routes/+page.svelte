@@ -13,6 +13,34 @@
     const education = $derived(data.education);
     const languages = $derived(data.languages);
 
+    /**
+     * Normalizes an e-mail value to a mailto URL.
+     *
+     * @param {string | undefined} value - Raw e-mail value from content.
+     * @returns {string} Safe mailto URL or empty string.
+     */
+    function toMailtoHref(value: string | undefined): string {
+        if (!value) return "";
+        const normalized = value.trim();
+        return normalized.toLowerCase().startsWith("mailto:") ? normalized : `mailto:${normalized}`;
+    }
+
+    /**
+     * Normalizes an external URL to include scheme if missing.
+     *
+     * @param {string | undefined} value - Raw URL/host value from content.
+     * @returns {string} Normalized URL or empty string.
+     */
+    function toExternalHref(value: string | undefined): string {
+        if (!value) return "";
+        const normalized = value.trim();
+        return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
+    }
+
+    const contactEmailHref = $derived(toMailtoHref(contact.email));
+    const linkedInHref = $derived(toExternalHref(contact.linkedin));
+    const githubHref = $derived(toExternalHref(contact.github));
+
     const coreSkillGroups = $derived(
         skills.filter(
             (group: { title: string }) =>
@@ -167,9 +195,7 @@
                 <ul class="space-y-4">
                     <li class="flex items-center gap-3">
                         <span class="text-xl">📧</span>
-                        <a
-                            href={"mailto:" + (contact.email ?? "")}
-                            class="hover:text-blue-600 dark:hover:text-blue-400">
+                        <a href={contactEmailHref} class="hover:text-blue-600 dark:hover:text-blue-400">
                             {contact.email}
                         </a>
                     </li>
@@ -180,7 +206,7 @@
                     <li class="flex items-center gap-3">
                         <span class="text-xl">🔗</span>
                         <a
-                            href={"https://" + (contact.linkedin ?? "")}
+                            href={linkedInHref}
                             target="_blank"
                             rel="noreferrer"
                             class="hover:text-blue-600 dark:hover:text-blue-400">
@@ -190,7 +216,7 @@
                     <li class="flex items-center gap-3">
                         <span class="text-xl">💻</span>
                         <a
-                            href={"https://" + (contact.github ?? "")}
+                            href={githubHref}
                             target="_blank"
                             rel="noreferrer"
                             class="hover:text-blue-600 dark:hover:text-blue-400">
@@ -199,7 +225,6 @@
                     </li>
                 </ul>
             </div>
-
             <!-- Netlify Form -->
             <form
                 name="contact"

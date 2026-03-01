@@ -19,7 +19,13 @@ async function generatePdf() {
 
     try {
         const page = await browser.newPage();
-        await page.goto(CV_URL, { waitUntil: "networkidle" });
+        const response = await page.goto(CV_URL, { waitUntil: "networkidle" });
+
+        if (!response || !response.ok()) {
+            const status = response?.status() ?? "NO_RESPONSE";
+            throw new Error(`Failed to load CV page for PDF generation (status: ${status}).`);
+        }
+
         await page.emulateMedia({ media: "print" });
 
         await page.pdf({

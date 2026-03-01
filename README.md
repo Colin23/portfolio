@@ -25,6 +25,7 @@ bun run check && bun run eslint && bun run test:unit && bun run build
 ```
 
 CI runs automatically:
+
 - on pull requests targeting `main`
 - on pushes to `main`
 

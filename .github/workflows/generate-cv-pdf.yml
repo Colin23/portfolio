@@ -58,7 +58,7 @@ jobs:
 
       - name: Commit PDF if changed
         run: |
-          if git diff --quiet -- static/colin-moerbe-cv.pdf; then
+          if [ -z "$(git status --porcelain -- static/colin-moerbe-cv.pdf)" ]; then
             echo "No PDF changes."
             exit 0
           fi

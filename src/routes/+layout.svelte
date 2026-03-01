@@ -263,7 +263,7 @@
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
             <a
                 href="/"
-                class="mr-6 text-xl font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                class="mr-6 text-xl font-bold tracking-tight focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
                 onclick={closeMenu}>
                 Portfolio
             </a>
@@ -273,7 +273,7 @@
                     <a
                         href="/#{item.id}"
                         onclick={() => handleNavClick(item.id)}
-                        class="flex h-10 items-center text-center text-sm leading-tight font-semibold transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:text-blue-400 {activeSection ===
+                        class="flex h-10 items-center text-center text-sm leading-tight font-semibold transition-colors hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:hover:text-blue-400 {activeSection ===
                         item.id
                             ? 'text-blue-600 dark:text-blue-400'
                             : 'text-gray-600 dark:text-zinc-400'}">
@@ -283,12 +283,12 @@
                 <div class="h-4 w-px bg-gray-200 dark:bg-zinc-800"></div>
                 <button
                     onclick={downloadCV}
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none">
                     Download CV
                 </button>
                 <button
                     onclick={toggleTheme}
-                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-zinc-900"
+                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:hover:bg-zinc-900"
                     aria-label="Toggle Dark Mode">
                     <span class="hidden text-xl dark:inline">🌞</span>
                     <span class="inline text-xl dark:hidden">🌙</span>
@@ -298,7 +298,7 @@
             <div class="flex items-center space-x-4 lg:hidden">
                 <button
                     onclick={toggleTheme}
-                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-zinc-900"
+                    class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:hover:bg-zinc-900"
                     aria-label="Toggle Dark Mode">
                     <span class="hidden dark:inline">🌞</span>
                     <span class="inline dark:hidden">🌙</span>
@@ -306,7 +306,7 @@
                 <button
                     bind:this={menuToggleButtonEl}
                     onclick={toggleMenu}
-                    class="p-2 text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400"
+                    class="p-2 text-gray-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:text-gray-400"
                     aria-label="Toggle Menu"
                     aria-controls="mobile-navigation"
                     aria-expanded={isMenuOpen}>
@@ -328,7 +328,7 @@
                         <a
                             href="/#{item.id}"
                             onclick={() => handleNavClick(item.id)}
-                            class="text-lg font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 {activeSection ===
+                            class="text-lg font-semibold focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none {activeSection ===
                             item.id
                                 ? 'text-blue-600 dark:text-blue-400'
                                 : 'text-gray-600 dark:text-zinc-400'}">
@@ -340,7 +340,7 @@
                             closeMenu();
                             downloadCV();
                         }}
-                        class="self-start rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+                        class="self-start rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none">
                         Download CV
                     </button>
                 </div>
