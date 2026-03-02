@@ -28,7 +28,9 @@
 
     let scrollSection = $state("");
 
-    // Initialize state before first paint on client
+    /**
+     * Initialize state before the first paint on the client
+     */
     $effect.pre(() => {
         if (!browser || page.url.pathname !== "/") {
             scrollSection = "";
@@ -56,7 +58,9 @@
         }
     });
 
-    // Derive active section
+    /**
+     * Derives the active section based on the current scroll position.
+     */
     const activeSection = $derived.by(() => {
         const path = page.url.pathname;
         if (path !== "/") return "";
@@ -67,7 +71,7 @@
     let rafId: number | undefined;
 
     /**
-     * Updates active section based on which section top is closest to the header anchor line.
+     * Updates the active section based on which section top is closest to the header anchor line.
      */
     function updateActiveSectionByPosition(): void {
         if (!browser || page.url.pathname !== "/") return;
@@ -84,7 +88,7 @@
             return;
         }
 
-        // Keep no active nav item while user is still in the hero/about region.
+        // Keep no active nav item while the user is still in the hero/about region.
         if (window.scrollY < 120) {
             scrollSection = "";
             return;
@@ -120,7 +124,7 @@
     }
 
     /**
-     * Sets up observers/listeners to track active section.
+     * Sets up observers/listeners to track the active section.
      */
     function setupObserver(): void {
         if (!browser) return;
@@ -185,7 +189,9 @@
         };
     });
 
-    // Handle client-side navigation between routes
+    /**
+     * Handles client-side navigation between routes by setting up observers/listeners for active section tracking.
+     */
     $effect((): void => {
         const path = page.url.pathname;
 

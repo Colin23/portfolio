@@ -25,16 +25,15 @@
     <h3 class="mb-2 text-xl font-bold">{title}</h3>
     <p class="mb-4 text-sm text-gray-500 italic dark:text-zinc-400">{tech}</p>
 
-    <div class="relative mb-auto max-h-[80px] overflow-hidden">
+    <div class="relative mb-auto max-h-20 overflow-hidden">
         <div class="prose prose-sm max-w-none dark:prose-invert prose-h1:hidden prose-h2:hidden">
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html content}
         </div>
-        <div class="absolute bottom-0 h-8 w-full bg-gradient-to-t from-white to-transparent dark:from-zinc-900/50">
-        </div>
+        <div class="absolute bottom-0 h-8 w-full bg-linear-to-t from-white to-transparent dark:from-zinc-900/50"></div>
     </div>
 
-    <div class="mt-4 flex min-h-[1.5rem] flex-wrap items-center gap-4">
+    <div class="mt-4 flex min-h-6 flex-wrap items-center gap-4">
         {#if github}
             <a
                 href={github}

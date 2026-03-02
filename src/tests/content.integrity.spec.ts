@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * Reads a markdown content file from src/lib/content.
+ * Reads a Markdown content file from src/lib/content.
  *
  * @param {string} fileName - File name including extension.
  * @returns {string} UTF-8 file content.

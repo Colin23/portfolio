@@ -1,4 +1,4 @@
-# How to Update Your Portfolio
+# Updating the Portfolio
 
 ## Content (Single Source of Truth)
 
@@ -7,12 +7,12 @@ both the website and the CV page.
 
 - `profile.md`: The "About Me" hero text on the landing page.
 - `contact.md`: Name, role, location, phone, email, LinkedIn, and GitHub.
-- `experience.md`: Your work history.
-- `education.md`: Your education background.
-- `skills.md`: Your technical skills grouped by category.
-- `projects.md`: Your portfolio projects with descriptions and links.
-- `certificates.md`: Your professional certifications.
-- `languages.md`: Your spoken languages.
+- `experience.md`: Work history.
+- `education.md`: Education background.
+- `skills.md`: Technical skills grouped by category.
+- `projects.md`: Projects with descriptions and links.
+- `certificates.md`: Professional certifications.
+- `languages.md`: Spoken languages.
 
 ## Development
 

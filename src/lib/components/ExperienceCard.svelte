@@ -27,13 +27,12 @@
         <p class="mt-1 text-base font-medium text-gray-700 dark:text-zinc-300">{role}</p>
     {/if}
 
-    <div class="relative mt-4 mb-auto max-h-[80px] overflow-hidden">
+    <div class="relative mt-4 mb-auto max-h-20 overflow-hidden">
         <div class="prose prose-sm max-w-none dark:prose-invert">
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html content}
         </div>
-        <div class="absolute bottom-0 h-8 w-full bg-gradient-to-t from-white to-transparent dark:from-zinc-900/50">
-        </div>
+        <div class="absolute bottom-0 h-8 w-full bg-linear-to-t from-white to-transparent dark:from-zinc-900/50"></div>
     </div>
 
     <div class="mt-4 flex justify-end">

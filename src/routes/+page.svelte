@@ -27,7 +27,7 @@
     }
 
     /**
-     * Normalizes an external URL to include scheme if missing.
+     * Normalizes an external URL to include the scheme if missing.
      *
      * @param {string | undefined} value - Raw URL/host value from content.
      * @returns {string} Normalized URL or empty string.
@@ -195,17 +195,17 @@
                 </p>
                 <ul class="space-y-4">
                     <li class="flex items-center gap-3">
-                        <span class="text-xl">📧</span>
+                        <img src="/icons/mail.svg" alt="" aria-hidden="true" class="h-5 w-5" />
                         <a href={contactEmailHref} class="hover:text-blue-600 dark:hover:text-blue-400">
                             {contact.email}
                         </a>
                     </li>
                     <li class="flex items-center gap-3">
-                        <span class="text-xl">📍</span>
+                        <img src="/icons/map-pin.svg" alt="" aria-hidden="true" class="h-5 w-5" />
                         <span>{contact.location}</span>
                     </li>
                     <li class="flex items-center gap-3">
-                        <span class="text-xl">🔗</span>
+                        <img src="/icons/linkedin.svg" alt="" aria-hidden="true" class="h-5 w-5" />
                         <a
                             href={linkedInHref}
                             target="_blank"
@@ -215,7 +215,7 @@
                         </a>
                     </li>
                     <li class="flex items-center gap-3">
-                        <span class="text-xl">💻</span>
+                        <img src="/icons/github.svg" alt="" aria-hidden="true" class="h-5 w-5" />
                         <a
                             href={githubHref}
                             target="_blank"

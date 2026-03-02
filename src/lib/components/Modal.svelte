@@ -15,7 +15,7 @@
     let previousBodyOverflow = $state<string | null>(null);
     let previousBodyPaddingRight = $state<string | null>(null);
 
-    // Move modal element to body when it appears (portal pattern).
+    // Move the modal element to the body when it appears (portal pattern).
     // This intentionally manipulates the DOM to avoid clipping/stacking issues in nested containers
     // and to ensure consistent fullscreen backdrop/scroll locking behavior.
     $effect(() => {
