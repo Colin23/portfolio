@@ -1,12 +1,16 @@
 <script lang="ts">
-    import Experience from "$lib/content/en/experience.md";
-    import Education from "$lib/content/en/education.md";
+    import ExperienceEn from "$lib/content/en/experience.md";
+    import ExperienceDe from "$lib/content/de/experience.md";
+    import EducationEn from "$lib/content/en/education.md";
+    import EducationDe from "$lib/content/de/education.md";
     import type { Locale } from "$lib/i18n";
     import { t } from "$lib/i18n-copy";
 
     const { data } = $props();
     const locale = $derived((data.locale ?? "en") as Locale);
     const ui = $derived(t(locale));
+    const Experience = $derived(locale === "de" ? ExperienceDe : ExperienceEn);
+    const Education = $derived(locale === "de" ? EducationDe : EducationEn);
 </script>
 
 <div class="print-container flex flex-col gap-8 pt-24 print:block print:pt-0">
