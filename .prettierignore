@@ -14,3 +14,4 @@ node_modules/
 ### GH Actions ###
 .github/workflows/*.yml
 .github/workflows/*.yaml
+.github/dependabot.yml
