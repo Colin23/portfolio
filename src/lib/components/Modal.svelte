@@ -77,14 +77,14 @@
             tabindex="0">
             <!-- Modal Content -->
             <div
-                class="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-gray-100 bg-white p-8 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+                class="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-gray-100 bg-white p-8 text-gray-900 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
                 onclick={e => e.stopPropagation()}
                 role="presentation">
                 <div class="mb-6 flex items-center justify-between">
-                    <h2 class="text-2xl font-bold">{title}</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-zinc-100">{title}</h2>
                     <button
                         onclick={onClose}
-                        class="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-zinc-800"
+                        class="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
                         aria-label="Close Modal">
                         <span class="text-2xl">✕</span>
                     </button>

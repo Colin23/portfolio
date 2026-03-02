@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { dev } from "$app/environment";
     import ExperienceCard from "$lib/components/ExperienceCard.svelte";
     import CertificateCard from "$lib/components/CertificateCard.svelte";
     import ProjectCard from "$lib/components/ProjectCard.svelte";
@@ -229,9 +230,17 @@
             <form
                 name="contact"
                 method="POST"
+                action="/"
                 data-netlify="true"
+                onsubmit={e => {
+                    if (dev) {
+                        e.preventDefault();
+                        alert("Form submissions are handled by Netlify in deployed environments.");
+                    }
+                }}
                 class="flex flex-col gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50">
                 <input type="hidden" name="form-name" value="contact" />
+                <input type="hidden" name="next" value="/contact-success/" />
                 <div class="flex flex-col gap-1">
                     <label for="name" class="text-sm font-medium">Name</label>
                     <input
