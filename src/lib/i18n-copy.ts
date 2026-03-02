@@ -19,6 +19,7 @@ export const copy = {
             switchTo: "Switch language"
         },
         home: {
+            heroGreeting: "Hi, I'm",
             getInTouch: "Get in touch",
             viewResume: "View Resume",
             technicalExpertise: "Technical Expertise",
@@ -64,6 +65,7 @@ export const copy = {
             switchTo: "Sprache wechseln"
         },
         home: {
+            heroGreeting: "Hi, ich bin",
             getInTouch: "Kontakt aufnehmen",
             viewResume: "Lebenslauf ansehen",
             technicalExpertise: "Technische Expertise",

@@ -83,7 +83,7 @@
     <!-- About Section (Hero) -->
     <section id="about" class="flex min-h-[70vh] scroll-mt-24 flex-col justify-center py-20">
         <h1 class="mb-6 text-5xl font-extrabold tracking-tight md:text-7xl">
-            Hi, I'm <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
+            {ui.home.heroGreeting} <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
         </h1>
         <p class="max-w-2xl text-xl leading-relaxed text-gray-600 md:text-2xl dark:text-gray-300">{profile}</p>
         <div class="mt-10 flex gap-4">
