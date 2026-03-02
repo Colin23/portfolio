@@ -230,7 +230,7 @@
             <form
                 name="contact"
                 method="POST"
-                action="/"
+                action="/contact-success/"
                 data-netlify="true"
                 onsubmit={e => {
                     if (dev) {
@@ -240,7 +240,6 @@
                 }}
                 class="flex flex-col gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50">
                 <input type="hidden" name="form-name" value="contact" />
-                <input type="hidden" name="next" value="/contact-success/" />
                 <div class="flex flex-col gap-1">
                     <label for="name" class="text-sm font-medium">Name</label>
                     <input
