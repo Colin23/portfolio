@@ -1,5 +1,6 @@
 <svelte:head>
     <title>Message Sent | Colin Mörbe</title>
+    <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-4 py-24 md:px-8">
