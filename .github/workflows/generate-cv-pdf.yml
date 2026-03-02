@@ -57,24 +57,37 @@ jobs:
         run: |
           if [ -f preview.pid ]; then kill "$(cat preview.pid)" || true; fi
 
-      - name: Check PDF changes
-        id: pdf_changes
+      - name: Collect changed PDF paths for PR commit
+        id: pdf_paths
+        shell: bash
         run: |
-          if [ -z "$(git status --porcelain -- static/colin-moerbe-cv.pdf 'static/*-colin-moerbe-cv.pdf')" ]; then
+          mapfile -t changed_pdfs < <(
+            git diff --name-only -- \
+              static/colin-moerbe-cv.pdf \
+              'static/*-colin-moerbe-cv.pdf'
+          )
+
+          if [ "${#changed_pdfs[@]}" -eq 0 ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
+          {
+            echo "changed=true"
+            echo "add_paths<<EOF"
+            for file in "${changed_pdfs[@]}"; do
+              echo "$file"
+            done
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Create pull request for updated PDFs
-        if: steps.pdf_changes.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
+        if: steps.pdf_paths.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore: regenerate CV PDFs"
           title: "chore: regenerate CV PDFs"
           body: "Automated update of stable and dated CV PDFs."
           branch: "chore/update-cv-pdf"
           delete-branch: true
-          add-paths: |
-            static/colin-moerbe-cv.pdf
-            static/*-colin-moerbe-cv.pdf
+          add-paths: ${{ steps.pdf_paths.outputs.add_paths }}
