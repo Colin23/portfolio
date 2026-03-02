@@ -17,6 +17,11 @@
     const ui = $derived(t(locale));
     const otherLocale = $derived(getAltLocale(locale));
 
+    const isPortfolioHomeRoute = $derived.by(() => {
+        const segments = page.url.pathname.split("/").filter(Boolean);
+        return segments.length === 0 || (segments.length === 1 && (segments[0] === "en" || segments[0] === "de"));
+    });
+
     const localizedSiteTitle = $derived(locale === "de" ? "Colin Mörbe | Portfolio" : "Colin Mörbe | Portfolio");
     const localizedSiteDescription = $derived(
         locale === "de"
@@ -55,7 +60,7 @@
      * Initialize state before the first paint on the client
      */
     $effect.pre(() => {
-        if (!browser || page.url.pathname !== "/") {
+        if (!browser || !isPortfolioHomeRoute) {
             scrollSection = "";
             return;
         }
@@ -85,8 +90,7 @@
      * Derives the active section based on the current scroll position.
      */
     const activeSection = $derived.by(() => {
-        const path = page.url.pathname;
-        if (path !== "/") return "";
+        if (!isPortfolioHomeRoute) return "";
         return scrollSection;
     });
 
@@ -97,7 +101,7 @@
      * Updates the active section based on which section top is closest to the header anchor line.
      */
     function updateActiveSectionByPosition(): void {
-        if (!browser || page.url.pathname !== "/") return;
+        if (!browser || !isPortfolioHomeRoute) return;
 
         const sections = navItems
             .map(item => document.getElementById(item.id))
@@ -179,7 +183,7 @@
     }
 
     onMount((): (() => void) => {
-        if (page.url.pathname === "/") {
+        if (isPortfolioHomeRoute) {
             setupObserver();
         }
 
@@ -241,7 +245,10 @@
         }
 
         const nextPath = `/${segments.join("/")}${page.url.pathname.endsWith("/") ? "/" : ""}`;
-        goto(`${nextPath}${page.url.search}${page.url.hash}`);
+        goto(`${nextPath}${page.url.search}${page.url.hash}`, {
+            noScroll: true,
+            keepFocus: true
+        });
     }
 
     /**
