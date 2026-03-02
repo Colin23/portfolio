@@ -4,15 +4,15 @@
     import { page } from "$app/state";
     import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
-    import { getAltLocale, type Locale } from "$lib/i18n";
+    import { getAltLocale, isLocale, type Locale } from "$lib/i18n";
     import { t } from "$lib/i18n-copy";
 
     const { children } = $props();
 
     const siteUrl = "https://colinmoerbe.com";
     const locale = $derived.by<Locale>(() => {
-        const first = page.url.pathname.split("/").filter(Boolean)[0];
-        return first === "de" ? "de" : "en";
+        const first = page.url.pathname.split("/").filter(Boolean)[0] ?? "";
+        return isLocale(first) ? first : "en";
     });
     const ui = $derived(t(locale));
     const otherLocale = $derived(getAltLocale(locale));

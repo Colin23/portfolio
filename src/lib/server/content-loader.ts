@@ -105,10 +105,18 @@ function parseExperience(content: string): ExperienceEntry[] {
  * @param content Markdown content.
  */
 function parseCertificates(content: string): CertificateEntry[] {
-    const sections = content.split(/^## /m).slice(1);
+    const sections = content
+        .split(/^## /m)
+        .slice(1)
+        .filter(section => section.trim().length > 0);
+
     return sections.map(section => {
-        const lines = section.split("\n");
-        const title = lines[0].trim();
+        const lines = section
+            .split("\n")
+            .map(line => line.trim())
+            .filter(Boolean);
+
+        const title = (lines[0] ?? "").trim();
         const infoLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
         const info = infoLine ? infoLine.replaceAll("_", "").trim() : "";
 
