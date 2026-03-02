@@ -9,7 +9,7 @@
     const siteUrl = "https://colinmoerbe.com";
     const siteTitle = "Colin Mörbe | Portfolio";
     const siteDescription =
-        "Software engineer portfolio featuring experience, projects, skills, certificates, and downloadable CV.";
+        "Colin Mörbe | Backend Software Engineer portfolio with projects, professional experience, technical skills, certificates, and a downloadable CV.";
     const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`);
 
     let isMenuOpen = $state(false);

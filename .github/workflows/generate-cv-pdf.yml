@@ -62,9 +62,14 @@ jobs:
         shell: bash
         run: |
           mapfile -t changed_pdfs < <(
-            git diff --name-only -- \
-              static/colin-moerbe-cv.pdf \
-              'static/*-colin-moerbe-cv.pdf'
+            {
+              git diff --name-only -- \
+                static/colin-moerbe-cv.pdf \
+                'static/*-colin-moerbe-cv.pdf'
+              git ls-files --others --exclude-standard -- \
+                static/colin-moerbe-cv.pdf \
+                'static/*-colin-moerbe-cv.pdf'
+            } | sort -u
           )
 
           if [ "${#changed_pdfs[@]}" -eq 0 ]; then
