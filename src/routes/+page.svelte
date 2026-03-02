@@ -5,6 +5,7 @@
     import ProjectCard from "$lib/components/ProjectCard.svelte";
     import type { Locale } from "$lib/i18n";
     import { t } from "$lib/i18n-copy";
+    import { FAMILIARITY_TITLES_BY_LOCALE } from "$lib/familiarity-titles";
 
     const { data } = $props();
     const profile = $derived(data.profile);
@@ -19,11 +20,6 @@
     const locale = $derived((data.locale ?? "en") as Locale);
     const ui = $derived(t(locale));
 
-    const familiarityTitlesByLocale: Record<Locale, readonly string[]> = {
-        en: ["Working Knowledge", "Familiarity", "Additional Technologies", "Basic knowledge"],
-        de: ["Grundkenntnisse", "Grundwissen", "Zusätzliche Technologien", "Vertrautheit"]
-    };
-
     /**
      * Normalizes a title string by trimming and converting to lowercase.
      * @param title - The title string to normalize.
@@ -32,7 +28,7 @@
         return title.trim().toLocaleLowerCase();
     }
 
-    const normalizedFamiliarityTitles = $derived(new Set(familiarityTitlesByLocale[locale].map(normalizeTitle)));
+    const normalizedFamiliarityTitles = $derived(new Set(FAMILIARITY_TITLES_BY_LOCALE[locale].map(normalizeTitle)));
 
     /**
      * Normalizes an e-mail value to a mailto URL.
