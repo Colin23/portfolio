@@ -19,6 +19,19 @@
     const locale = $derived((data.locale ?? "en") as Locale);
     const ui = $derived(t(locale));
 
+    const familiarityTitlesByLocale: Record<Locale, readonly string[]> = {
+        en: ["Working Knowledge", "Familiarity", "Additional Technologies", "Basic knowledge"],
+        de: ["Grundkenntnisse", "Grundwissen", "Zusätzliche Technologien", "Vertrautheit"]
+    };
+
+    function normalizeTitle(title: string): string {
+        return title.trim().toLocaleLowerCase();
+    }
+
+    const normalizedFamiliarityTitles = $derived(
+        new Set(familiarityTitlesByLocale[locale].map(normalizeTitle))
+    );
+
     /**
      * Normalizes an e-mail value to a mailto URL.
      *
@@ -48,24 +61,12 @@
     const githubHref = $derived(toExternalHref(contact.github));
 
     const coreSkillGroups = $derived(
-        skills.filter(
-            (group: { title: string }) =>
-                group.title !== "Working Knowledge" &&
-                group.title !== "Familiarity" &&
-                group.title !== "Additional Technologies" &&
-                group.title !== "Basic knowledge"
-        )
+        skills.filter((group: { title: string }) => !normalizedFamiliarityTitles.has(normalizeTitle(group.title)))
     );
 
     const familiarityItems = $derived(
         skills
-            .filter(
-                (group: { title: string; items: string[] }) =>
-                    group.title === "Working Knowledge" ||
-                    group.title === "Familiarity" ||
-                    group.title === "Additional Technologies" ||
-                    group.title === "Basic knowledge"
-            )
+            .filter((group: { title: string; items: string[] }) => normalizedFamiliarityTitles.has(normalizeTitle(group.title)))
             .flatMap((group: { items: string[] }) => group.items)
     );
 </script>
@@ -121,7 +122,7 @@
             <div
                 class="mt-8 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 dark:border-zinc-700 dark:bg-zinc-900/30">
                 <h3 class="mb-3 text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-zinc-400">
-                    Basic knowledge
+                    {ui.cv.basicKnowledge}
                 </h3>
                 <p class="text-sm text-gray-600 dark:text-zinc-400">{familiarityItems.join(" · ")}</p>
             </div>

@@ -1,4 +1,4 @@
-# Technical Schwerpunkte
+# Technische Schwerpunkte
 
 ## Backend
 

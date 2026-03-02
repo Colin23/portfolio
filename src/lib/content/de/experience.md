@@ -14,11 +14,11 @@
   Verwendung von Parallelisierung.
 - Entwicklung von Kafka-basierten Integrationsschnittstellen mit hohem Durchsatz.
 - Entwicklung, Containerisierung und Betrieb von Backend-Services auf Kubernetes (Azure) sowie Aufbau einer
-  AWS-Infrastruktur mit CDK (Java)
+  AWS-Infrastruktur mit CDK (Java).
 - Verbesserung der CI/CD-Pipelines und nachhaltige Reduzierung wiederkehrender Produktionsprobleme durch
   Refaktorisierung und verbesserte Protokollierungs- und Überwachungsstrategien.
 - Leitung einer unternehmensweiten Lerninitiative, einschließlich Design und Entwicklung eines internen Tools zur
-  Abbildung von Lernpfaden und Kompetenzen
+  Abbildung von Lernpfaden und Kompetenzen.
 
 ## 11/2022 – 06/2023
 

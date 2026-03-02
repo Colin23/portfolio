@@ -1,4 +1,4 @@
 # Sprachen
 
 - Deutsch (Muttersprache)
-- Englisch (Verhandlungssicher)
+- Englisch (verhandlungssicher)

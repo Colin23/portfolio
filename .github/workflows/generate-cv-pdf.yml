@@ -71,10 +71,12 @@ jobs:
         shell: bash
         run: |
           for file in static/colin-moerbe-cv-en.pdf static/colin-moerbe-cv-de.pdf; do
-            if [ -f "$file" ]; then
-              qpdf --linearize "$file" "$file.normalized"
-              mv "$file.normalized" "$file"
+            if [ ! -f "$file" ]; then
+              echo "Missing artifact: $file"
+              exit 1
             fi
+            qpdf --linearize "$file" "$file.normalized"
+            mv "$file.normalized" "$file"
           done
 
       - name: Check for PDF changes

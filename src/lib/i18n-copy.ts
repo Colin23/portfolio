@@ -48,7 +48,7 @@ export const copy = {
     },
     de: {
         nav: {
-            skills: "Tech Stack",
+            skills: "Technologie",
             experience: "Erfahrung",
             education: "Ausbildung",
             languages: "Sprachen",

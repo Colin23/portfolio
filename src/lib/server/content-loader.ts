@@ -41,17 +41,26 @@ type ProjectEntry = {
     liveDemo: string | undefined;
 };
 
+const FAMILIARITY_TITLES_BY_LOCALE: Record<Locale, readonly string[]> = {
+    en: ["Working Knowledge", "Familiarity", "Additional Technologies", "Basic knowledge"],
+    de: ["Grundkenntnisse", "Grundwissen", "Zusätzliche Technologien", "Vertrautheit"]
+};
+
 /**
  * Resolves the content file path for a given locale and file name.
  * @param locale 2-letter locale code
  * @param fileName File name including extension
  */
-function resolveContentPath(locale: Locale, fileName: string): string {
+async function resolveContentPathAsync(locale: Locale, fileName: string): Promise<string> {
     const localizedPath = path.resolve(`src/lib/content/${locale}/${fileName}`);
-    if (fs.existsSync(localizedPath)) return localizedPath;
 
-    // Backward-compatible fallback while migrating files.
-    return path.resolve(`src/lib/content/${fileName}`);
+    try {
+        await fs.promises.access(localizedPath, fs.constants.F_OK);
+        return localizedPath;
+    } catch {
+        // Backward-compatible fallback while migrating files.
+        return path.resolve(`src/lib/content/${fileName}`);
+    }
 }
 
 /**
@@ -59,8 +68,9 @@ function resolveContentPath(locale: Locale, fileName: string): string {
  * @param locale 2-letter locale code
  * @param fileName File name including extension
  */
-function readContent(locale: Locale, fileName: string): string {
-    return fs.readFileSync(resolveContentPath(locale, fileName), "utf-8");
+async function readContent(locale: Locale, fileName: string): Promise<string> {
+    const resolvedPath = await resolveContentPathAsync(locale, fileName);
+    return fs.promises.readFile(resolvedPath, "utf-8");
 }
 
 /**
@@ -249,7 +259,7 @@ function parseLanguages(content: string): string[] {
  * Loads portfolio content for a given locale.
  * @param locale 2-letter locale code
  */
-export function loadPortfolioContent(locale: Locale): {
+export async function loadPortfolioContent(locale: Locale): Promise<{
     locale: Locale;
     projects: ProjectEntry[];
     skills: SkillGroup[];
@@ -259,15 +269,15 @@ export function loadPortfolioContent(locale: Locale): {
     contact: Contact;
     education: EducationEntry[];
     languages: string[];
-} {
-    const projects = parseProjects(readContent(locale, "projects.md"));
-    const skills = parseSkills(readContent(locale, "skills.md"));
-    const experience = parseExperience(readContent(locale, "experience.md"));
-    const certificates = parseCertificates(readContent(locale, "certificates.md"));
-    const profile = parseProfile(readContent(locale, "profile.md"));
-    const contact = parseContact(readContent(locale, "contact.md"));
-    const education = parseEducation(readContent(locale, "education.md"));
-    const languages = parseLanguages(readContent(locale, "languages.md"));
+}> {
+    const projects = parseProjects(await readContent(locale, "projects.md"));
+    const skills = parseSkills(await readContent(locale, "skills.md"));
+    const experience = parseExperience(await readContent(locale, "experience.md"));
+    const certificates = parseCertificates(await readContent(locale, "certificates.md"));
+    const profile = parseProfile(await readContent(locale, "profile.md"));
+    const contact = parseContact(await readContent(locale, "contact.md"));
+    const education = parseEducation(await readContent(locale, "education.md"));
+    const languages = parseLanguages(await readContent(locale, "languages.md"));
 
     return {
         locale,
@@ -286,25 +296,20 @@ export function loadPortfolioContent(locale: Locale): {
  * Loads CV content for a given locale.
  * @param locale 2-letter locale code
  */
-export function loadCvContent(locale: Locale): {
+export async function loadCvContent(locale: Locale): Promise<{
     locale: Locale;
     contact: Contact;
     profile: string;
     coreSkills: SkillGroup[];
     familiarity: string[];
     languages: string[];
-} {
-    const contact = parseContact(readContent(locale, "contact.md"));
-    const profile = parseProfile(readContent(locale, "profile.md"));
-    const skills = parseSkills(readContent(locale, "skills.md"));
-    const languages = parseLanguages(readContent(locale, "languages.md"));
+}> {
+    const contact = parseContact(await readContent(locale, "contact.md"));
+    const profile = parseProfile(await readContent(locale, "profile.md"));
+    const skills = parseSkills(await readContent(locale, "skills.md"));
+    const languages = parseLanguages(await readContent(locale, "languages.md"));
 
-    const familiarityTitles = new Set([
-        "Working Knowledge",
-        "Familiarity",
-        "Additional Technologies",
-        "Basic knowledge"
-    ]);
+    const familiarityTitles = new Set(FAMILIARITY_TITLES_BY_LOCALE[locale]);
 
     const coreSkills = skills.filter(group => !familiarityTitles.has(group.title));
     const familiarity = skills.filter(group => familiarityTitles.has(group.title)).flatMap(group => group.items);

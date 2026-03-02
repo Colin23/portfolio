@@ -4,7 +4,7 @@
 
 ### Hochschule Reutlingen
 
-B.Sc. Medien- und Kommunikationsinformatik (Note: 2.0)
+B.Sc. Medien- und Kommunikationsinformatik (Note: 2,0)
 
 ## 10/2018 – 02/2020
 
