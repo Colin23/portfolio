@@ -3,9 +3,10 @@
         title: string;
         info: string;
         link?: string;
+        ctaLabel?: string;
     }
 
-    const { title, info, link }: Props = $props();
+    const { title, info, link, ctaLabel = "View Certificate" }: Props = $props();
 </script>
 
 <div
@@ -21,7 +22,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400">
-                View Certificate
+                {ctaLabel}
             </a>
         </div>
     {/if}

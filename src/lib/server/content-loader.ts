@@ -111,7 +111,11 @@ function parseCertificates(content: string): CertificateEntry[] {
         const title = lines[0].trim();
         const infoLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
         const info = infoLine ? infoLine.replaceAll("_", "").trim() : "";
-        const link = lines.find(l => l.includes("[View Certificate]"))?.match(/\(([^)]+)\)/)?.[1];
+
+        const linkMatch = lines
+            .map(line => /\[[^\]]+]\(([^)]+)\)/.exec(line))
+            .find((match): match is RegExpExecArray => match !== null);
+        const link = linkMatch?.[1];
 
         return { title, info, link };
     });

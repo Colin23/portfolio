@@ -22,7 +22,7 @@
         return segments.length === 0 || (segments.length === 1 && (segments[0] === "en" || segments[0] === "de"));
     });
 
-    const localizedSiteTitle = $derived(locale === "de" ? "Colin Mörbe | Portfolio" : "Colin Mörbe | Portfolio");
+    const localizedSiteTitle = "Colin Mörbe | Portfolio";
     const localizedSiteDescription = $derived(
         locale === "de"
             ? "Backend Software Engineer Portfolio mit Projekten, Berufserfahrung, Tech-Stack, Zertifikaten und downloadbarem Lebenslauf."
@@ -321,7 +321,7 @@
 <a
     href="#main-content"
     class="sr-only z-60 rounded bg-blue-600 px-3 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus-visible:ring-2 focus-visible:ring-blue-400">
-    Skip to content
+    {ui.layout.skipToContent}
 </a>
 
 <div

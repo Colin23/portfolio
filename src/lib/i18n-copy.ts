@@ -16,7 +16,8 @@ export const copy = {
             downloadCv: "Download Resume",
             toggleTheme: "Toggle Dark Mode",
             toggleMenu: "Toggle Menu",
-            switchTo: "Switch language"
+            switchTo: "Switch language",
+            skipToContent: "Skip to content"
         },
         home: {
             heroGreeting: "Hi, I'm",
@@ -28,9 +29,13 @@ export const copy = {
             languages: "Languages",
             projects: "Projects",
             certificates: "Certificates",
+            viewCertificate: "View Certificate",
             getInTouchHeading: "Get in Touch",
             contactIntro:
                 "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.",
+            name: "Name",
+            email: "Email",
+            message: "Message",
             sendMessage: "Send Message"
         },
         cv: {
@@ -62,7 +67,8 @@ export const copy = {
             downloadCv: "Lebenslauf herunterladen",
             toggleTheme: "Dark Mode umschalten",
             toggleMenu: "Menü umschalten",
-            switchTo: "Sprache wechseln"
+            switchTo: "Sprache wechseln",
+            skipToContent: "Zum Inhalt springen"
         },
         home: {
             heroGreeting: "Hi, ich bin",
@@ -74,9 +80,13 @@ export const copy = {
             languages: "Sprachen",
             projects: "Projekte",
             certificates: "Zertifikate",
+            viewCertificate: "Zum Zertifikat",
             getInTouchHeading: "Kontakt",
             contactIntro:
                 "Ich bin immer offen für neue Projekte, kreative Ideen oder Möglichkeiten, Teil eurer Vision zu sein.",
+            name: "Name",
+            email: "E-Mail",
+            message: "Nachricht",
             sendMessage: "Nachricht senden"
         },
         cv: {
