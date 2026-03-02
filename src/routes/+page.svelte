@@ -232,6 +232,7 @@
                 method="POST"
                 action="/contact-success/"
                 data-netlify="true"
+                netlify-honeypot="bot-field"
                 onsubmit={e => {
                     if (dev) {
                         e.preventDefault();
@@ -240,12 +241,17 @@
                 }}
                 class="flex flex-col gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50">
                 <input type="hidden" name="form-name" value="contact" />
+                <p class="hidden" aria-hidden="true">
+                    <label for="bot-field">Don’t fill this out if you’re human:</label>
+                    <input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off" />
+                </p>
                 <div class="flex flex-col gap-1">
                     <label for="name" class="text-sm font-medium">Name</label>
                     <input
                         type="text"
                         id="name"
                         name="name"
+                        autocomplete="name"
                         required
                         class="rounded-lg border border-gray-200 bg-white p-2 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-800 dark:bg-slate-950" />
                 </div>
@@ -255,6 +261,7 @@
                         type="email"
                         id="email"
                         name="email"
+                        autocomplete="email"
                         required
                         class="rounded-lg border border-gray-200 bg-white p-2 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-800 dark:bg-slate-950" />
                 </div>
