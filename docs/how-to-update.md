@@ -3,15 +3,16 @@
 ## Content (Single Source of Truth)
 
 All CV-related content is stored in Markdown files in `src/lib/content/`. Editing these files will automatically update
-both the website's CV page and the generated PDF.
+both the website and the CV page.
 
+- `profile.md`: The "About Me" hero text on the landing page.
+- `contact.md`: Name, role, location, phone, email, LinkedIn, and GitHub.
 - `experience.md`: Your work history.
-- `skills.md`: Your technical skills.
-- `projects.md`: Your portfolio projects.
-
-## About Me Section
-
-The 'About Me' section on the landing page is hardcoded in `src/routes/+page.svelte`. You can edit it there.
+- `education.md`: Your education background.
+- `skills.md`: Your technical skills grouped by category.
+- `projects.md`: Your portfolio projects with descriptions and links.
+- `certificates.md`: Your professional certifications.
+- `languages.md`: Your spoken languages.
 
 ## Development
 
@@ -19,6 +20,14 @@ To start the development server:
 
 ```bash
 bun run dev
+```
+
+## Quality Checks
+
+Run all checks locally before pushing:
+
+```bash
+bun run check && bun run eslint && bun run prettier && bun run test:unit && bun run build
 ```
 
 ## Building for Production
@@ -33,9 +42,12 @@ The output will be in the `build/` directory.
 
 ## PDF Generation
 
-The PDF is generated using the browser's print engine to ensure it perfectly matches your website's styling.
-To 'download' your CV as a PDF:
+The CV PDF is generated automatically via a GitHub Actions workflow whenever changes are pushed to main. It uses
+Playwright to render the /cv route and produce static/colin-moerbe-cv.pdf.
+To generate the PDF locally:
 
-1. Click the 'Download CV' button in the navigation bar.
-2. In the browser's print dialog, select 'Save as PDF' as the destination.
-3. (Optional) In the print settings, ensure 'Background graphics' is enabled if you have colored backgrounds.
+```bash
+bun run generate:cv-pdf:local
+```
+
+This builds the site, starts a preview server, generates the PDF, and shuts down the server.

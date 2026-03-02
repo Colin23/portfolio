@@ -2,14 +2,14 @@
 
 Follow these steps to get the portfolio project up and running on your local machine.
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
 - [Bun](https://bun.com/) (latest version)
 - [Git](https://git-scm.com/)
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Clone the repository:**
 
@@ -30,14 +30,14 @@ Before you begin, ensure you have the following installed:
     ```
     Open [http://localhost:5173](http://localhost:5173) in your browser to see the result.
 
-## 📂 Content Management
+## Content Management
 
 The project follows a **Single Source of Truth** pattern. Most content is stored in `src/lib/content/` as Markdown
 files.
 
 For detailed instructions on how to update your CV data, see [How to Update Content](./how-to-update.md).
 
-## 🚢 Deployment
+## Deployment
 
 The project is configured for **Netlify** using SvelteKit's static adapter.
 

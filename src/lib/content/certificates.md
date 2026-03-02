@@ -1,13 +1,7 @@
 # Certificates
 
-## Oracle Certified Professional: Java SE 17 Developer
+## Microsoft Certified: Azure Fundamentals
 
-_Oracle, 2023_
+_Microsoft, 2024_
 
-- [View Certificate](https://example.com)
-
-## Professional Scrum Master I
-
-_Scrum.org, 2022_
-
-- [View Certificate](https://example.com)
+- [View Certificate](https://learn.microsoft.com/de-de/users/colinmoerbe/credentials/3f640b77279204a5)

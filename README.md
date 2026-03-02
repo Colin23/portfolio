@@ -2,13 +2,13 @@
 
 This repository contains my personal portfolio.
 
-## 📂 Project Structure
+## Project Structure
 
 - `src/lib/content/`: Markdown files containing CV data (Experience, Skills, Projects, ...).
 - `src/routes/cv/`: The CV page with print-optimized styling for PDF generation.
 - `docs/`: Documentation for planning, tech stack, and updates.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend:** SvelteKit (SSG Mode)
 - **Styling:** Tailwind CSS v4
@@ -16,25 +16,7 @@ This repository contains my personal portfolio.
 - **Runtime:** Bun
 - **Hosting:** Netlify
 
-## ✅ Quality Checks
-
-Run all checks locally before pushing:
-
-```bash
-bun run check && bun run eslint && bun run test:unit && bun run build
-```
-
-CI runs automatically:
-
-- on pull requests targeting `main`
-- on pushes to `main`
-
-## 🔎 SEO & Crawling
-
-- `static/robots.txt` allows crawling and points to the sitemap.
-- `static/sitemap.xml` lists indexable site routes.
-
-## 📄 Documentation
+## Documentation
 
 - [Setup & Development Guide](docs/setup.md)
 - [Project Plan](docs/plan.md)
@@ -43,6 +25,6 @@ CI runs automatically:
 - [How to Update Content](docs/how-to-update.md)
 - [AI Agent Rules](AGENTS.md)
 
-## 📜 License
+## License
 
 [License](LICENSE)
