@@ -34,7 +34,11 @@
     const localeAgnosticPath = $derived.by(() => {
         const segments = page.url.pathname.split("/").filter(Boolean);
         if (segments[0] === "en" || segments[0] === "de") segments.shift();
-        return `/${segments.join("/")}${page.url.pathname.endsWith("/") ? "/" : ""}`;
+
+        const path = `/${segments.join("/")}`;
+        if (path === "/") return "/";
+        if (page.url.pathname.endsWith("/")) return `${path}/`;
+        return path;
     });
 
     const hreflangEn = $derived(`${siteUrl}/en${localeAgnosticPath}`);
@@ -183,10 +187,6 @@
     }
 
     onMount((): (() => void) => {
-        if (isPortfolioHomeRoute) {
-            setupObserver();
-        }
-
         const handleDocumentClick = (event: MouseEvent): void => {
             if (!isMenuOpen) return;
 
@@ -204,9 +204,6 @@
         document.addEventListener("click", handleDocumentClick, true);
 
         return (): void => {
-            observer?.disconnect();
-            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
-
             if (rafId !== undefined) {
                 window.cancelAnimationFrame(rafId);
                 rafId = undefined;
@@ -222,6 +219,24 @@
     $effect(() => {
         if (!browser) return;
         document.documentElement.lang = locale;
+    });
+
+    $effect(() => {
+        if (!browser) return;
+
+        if (!isPortfolioHomeRoute) {
+            observer?.disconnect();
+            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
+            scrollSection = "";
+            return;
+        }
+
+        setupObserver();
+
+        return (): void => {
+            observer?.disconnect();
+            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
+        };
     });
 
     /**

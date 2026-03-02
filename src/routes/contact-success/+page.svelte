@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-    <title>Message Sent | Colin Mörbe</title>
+    <title>{ui.success.title} | Colin Mörbe</title>
     <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 

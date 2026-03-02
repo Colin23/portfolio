@@ -24,13 +24,15 @@
         de: ["Grundkenntnisse", "Grundwissen", "Zusätzliche Technologien", "Vertrautheit"]
     };
 
+    /**
+     * Normalizes a title string by trimming and converting to lowercase.
+     * @param title - The title string to normalize.
+     */
     function normalizeTitle(title: string): string {
         return title.trim().toLocaleLowerCase();
     }
 
-    const normalizedFamiliarityTitles = $derived(
-        new Set(familiarityTitlesByLocale[locale].map(normalizeTitle))
-    );
+    const normalizedFamiliarityTitles = $derived(new Set(familiarityTitlesByLocale[locale].map(normalizeTitle)));
 
     /**
      * Normalizes an e-mail value to a mailto URL.
@@ -66,7 +68,9 @@
 
     const familiarityItems = $derived(
         skills
-            .filter((group: { title: string; items: string[] }) => normalizedFamiliarityTitles.has(normalizeTitle(group.title)))
+            .filter((group: { title: string; items: string[] }) =>
+                normalizedFamiliarityTitles.has(normalizeTitle(group.title))
+            )
             .flatMap((group: { items: string[] }) => group.items)
     );
 </script>
