@@ -3,28 +3,56 @@
     import { onMount } from "svelte";
     import { page } from "$app/state";
     import { browser } from "$app/environment";
+    import { goto } from "$app/navigation";
+    import { getAltLocale, isLocale, type Locale } from "$lib/i18n";
+    import { t } from "$lib/i18n-copy";
 
     const { children } = $props();
 
     const siteUrl = "https://colinmoerbe.com";
-    const siteTitle = "Colin Mörbe | Portfolio";
-    const siteDescription =
-        "Colin Mörbe | Backend Software Engineer portfolio with projects, professional experience, technical skills, certificates, and a downloadable CV.";
+    const locale = $derived.by<Locale>(() => {
+        const first = page.url.pathname.split("/").filter(Boolean)[0] ?? "";
+        return isLocale(first) ? first : "en";
+    });
+    const ui = $derived(t(locale));
+    const otherLocale = $derived(getAltLocale(locale));
+
+    const isPortfolioHomeRoute = $derived.by(() => {
+        const segments = page.url.pathname.split("/").filter(Boolean);
+        return segments.length === 0 || (segments.length === 1 && (segments[0] === "en" || segments[0] === "de"));
+    });
+
+    const localizedSiteTitle = "Colin Mörbe | Portfolio";
+    const localizedSiteDescription = $derived(ui.site.description);
+
     const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`);
+
+    const localeAgnosticPath = $derived.by(() => {
+        const segments = page.url.pathname.split("/").filter(Boolean);
+        if (segments[0] === "en" || segments[0] === "de") segments.shift();
+
+        const path = `/${segments.join("/")}`;
+        if (path === "/") return "/";
+        if (page.url.pathname.endsWith("/")) return `${path}/`;
+        return path;
+    });
+
+    const hreflangEn = $derived(`${siteUrl}/en${localeAgnosticPath}`);
+    const hreflangDe = $derived(`${siteUrl}/de${localeAgnosticPath}`);
 
     let isMenuOpen = $state(false);
     let mobileMenuEl = $state<HTMLElement | null>(null);
     let menuToggleButtonEl = $state<HTMLButtonElement | null>(null);
 
-    const navItems = [
-        { name: "Tech Stack", id: "skills" },
-        { name: "Experience", id: "experience" },
-        { name: "Education", id: "education" },
-        { name: "Languages", id: "languages" },
-        { name: "Projects", id: "projects" },
-        { name: "Certificates", id: "certificates" },
-        { name: "Contact", id: "contact" }
-    ];
+    const navItems = $derived.by(() => [
+        { id: "skills", label: ui.nav.skills },
+        { id: "experience", label: ui.nav.experience },
+        { id: "education", label: ui.nav.education },
+        { id: "languages", label: ui.nav.languages },
+        { id: "projects", label: ui.nav.projects },
+        { id: "certificates", label: ui.nav.certificates },
+        { id: "contact", label: ui.nav.contact }
+    ]);
 
     let scrollSection = $state("");
 
@@ -32,7 +60,7 @@
      * Initialize state before the first paint on the client
      */
     $effect.pre(() => {
-        if (!browser || page.url.pathname !== "/") {
+        if (!browser || !isPortfolioHomeRoute) {
             scrollSection = "";
             return;
         }
@@ -62,8 +90,7 @@
      * Derives the active section based on the current scroll position.
      */
     const activeSection = $derived.by(() => {
-        const path = page.url.pathname;
-        if (path !== "/") return "";
+        if (!isPortfolioHomeRoute) return "";
         return scrollSection;
     });
 
@@ -74,7 +101,7 @@
      * Updates the active section based on which section top is closest to the header anchor line.
      */
     function updateActiveSectionByPosition(): void {
-        if (!browser || page.url.pathname !== "/") return;
+        if (!browser || !isPortfolioHomeRoute) return;
 
         const sections = navItems
             .map(item => document.getElementById(item.id))
@@ -156,10 +183,6 @@
     }
 
     onMount((): (() => void) => {
-        if (page.url.pathname === "/") {
-            setupObserver();
-        }
-
         const handleDocumentClick = (event: MouseEvent): void => {
             if (!isMenuOpen) return;
 
@@ -177,9 +200,6 @@
         document.addEventListener("click", handleDocumentClick, true);
 
         return (): void => {
-            observer?.disconnect();
-            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
-
             if (rafId !== undefined) {
                 window.cancelAnimationFrame(rafId);
                 rafId = undefined;
@@ -192,21 +212,57 @@
     /**
      * Handles client-side navigation between routes by setting up observers/listeners for active section tracking.
      */
-    $effect((): void => {
-        const path = page.url.pathname;
+    $effect(() => {
+        if (!browser) return;
+        document.documentElement.lang = locale;
+    });
 
-        if (path === "/") {
-            setupObserver();
-        } else {
+    $effect(() => {
+        if (!browser) return;
+
+        if (!isPortfolioHomeRoute) {
             observer?.disconnect();
+            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
+            scrollSection = "";
+            return;
         }
+
+        setupObserver();
+
+        return (): void => {
+            observer?.disconnect();
+            window.removeEventListener("scroll", scheduleActiveSectionUpdate);
+        };
     });
 
     /**
-     * Triggers the CV download by opening the /cv route in a hidden iframe and printing it.
+     * Opens the locale-specific CV PDF in a new browser tab.
+     *
+     * The downloadCV function selects the file path based on the current locale
+     * and calls window.open with "_blank" and "noopener,noreferrer".
      */
     function downloadCV(): void {
-        window.open("/colin-moerbe-cv.pdf", "_blank", "noopener,noreferrer");
+        const file = locale === "de" ? "/colin-moerbe-cv-de.pdf" : "/colin-moerbe-cv-en.pdf";
+        window.open(file, "_blank", "noopener,noreferrer");
+    }
+
+    /**
+     * Sets the active language for the website.
+     * @param target - The locale to switch to.
+     */
+    function switchLanguage(target: Locale): void {
+        const segments = page.url.pathname.split("/").filter(Boolean);
+        if (segments[0] === "en" || segments[0] === "de") {
+            segments[0] = target;
+        } else {
+            segments.unshift(target);
+        }
+
+        const nextPath = `/${segments.join("/")}${page.url.pathname.endsWith("/") ? "/" : ""}`;
+        goto(`${nextPath}${page.url.search}${page.url.hash}`, {
+            noScroll: true,
+            keepFocus: true
+        });
     }
 
     /**
@@ -243,25 +299,28 @@
 </script>
 
 <svelte:head>
-    <title>{siteTitle}</title>
-    <meta name="description" content={siteDescription} />
+    <title>{localizedSiteTitle}</title>
+    <meta name="description" content={localizedSiteDescription} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={hreflangEn} />
+    <link rel="alternate" hreflang="de" href={hreflangDe} />
+    <link rel="alternate" hreflang="x-default" href={hreflangEn} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={siteTitle} />
-    <meta property="og:description" content={siteDescription} />
+    <meta property="og:title" content={localizedSiteTitle} />
+    <meta property="og:description" content={localizedSiteDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={`${siteUrl}/og-image.png`} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={siteTitle} />
-    <meta name="twitter:description" content={siteDescription} />
+    <meta name="twitter:title" content={localizedSiteTitle} />
+    <meta name="twitter:description" content={localizedSiteDescription} />
 </svelte:head>
 
 <a
     href="#main-content"
     class="sr-only z-60 rounded bg-blue-600 px-3 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus-visible:ring-2 focus-visible:ring-blue-400">
-    Skip to content
+    {ui.layout.skipToContent}
 </a>
 
 <div
@@ -270,34 +329,40 @@
         class="fixed top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/80 print:hidden">
         <nav class="mx-auto flex max-w-5xl items-center justify-between p-4">
             <a
-                href="/"
+                href={`/${locale}/`}
                 class="mr-6 text-xl font-bold tracking-tight focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
                 onclick={closeMenu}>
-                Portfolio
+                {ui.layout.portfolio}
             </a>
             <!-- Desktop Nav -->
             <div class="hidden items-center gap-6 lg:flex">
                 {#each navItems as item (item.id)}
                     <a
-                        href="/#{item.id}"
+                        href={`/${locale}/#${item.id}`}
                         onclick={() => handleNavClick(item.id)}
                         class="flex h-10 items-center text-center text-sm leading-tight font-semibold transition-colors hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:hover:text-blue-400 {activeSection ===
                         item.id
                             ? 'text-blue-600 dark:text-blue-400'
                             : 'text-gray-600 dark:text-zinc-400'}">
-                        {item.name}
+                        {item.label}
                     </a>
                 {/each}
                 <div class="h-4 w-px bg-gray-200 dark:bg-zinc-800"></div>
                 <button
+                    onclick={() => switchLanguage(otherLocale)}
+                    class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
+                    aria-label={`${ui.layout.switchTo}: ${otherLocale.toUpperCase()}`}>
+                    {otherLocale.toUpperCase()}
+                </button>
+                <button
                     onclick={downloadCV}
                     class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none">
-                    Download CV
+                    {ui.layout.downloadCv}
                 </button>
                 <button
                     onclick={toggleTheme}
                     class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:hover:bg-zinc-900"
-                    aria-label="Toggle Dark Mode">
+                    aria-label={ui.layout.toggleTheme}>
                     <span class="hidden text-xl dark:inline">🌞</span>
                     <span class="inline text-xl dark:hidden">🌙</span>
                 </button>
@@ -305,9 +370,15 @@
             <!-- Mobile -->
             <div class="flex items-center space-x-4 lg:hidden">
                 <button
+                    onclick={() => switchLanguage(otherLocale)}
+                    class="rounded-lg border border-gray-200 px-2 py-1 text-xs font-semibold dark:border-zinc-800"
+                    aria-label={`${ui.layout.switchTo}: ${otherLocale.toUpperCase()}`}>
+                    {otherLocale.toUpperCase()}
+                </button>
+                <button
                     onclick={toggleTheme}
                     class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:hover:bg-zinc-900"
-                    aria-label="Toggle Dark Mode">
+                    aria-label={ui.layout.toggleTheme}>
                     <span class="hidden dark:inline">🌞</span>
                     <span class="inline dark:hidden">🌙</span>
                 </button>
@@ -315,7 +386,7 @@
                     bind:this={menuToggleButtonEl}
                     onclick={toggleMenu}
                     class="p-2 text-gray-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none dark:text-gray-400"
-                    aria-label="Toggle Menu"
+                    aria-label={ui.layout.toggleMenu}
                     aria-controls="mobile-navigation"
                     aria-expanded={isMenuOpen}>
                     {#if isMenuOpen}
@@ -334,13 +405,13 @@
                 <div class="flex flex-col space-y-4">
                     {#each navItems as item (item.id)}
                         <a
-                            href="/#{item.id}"
+                            href={`/${locale}/#${item.id}`}
                             onclick={() => handleNavClick(item.id)}
                             class="text-lg font-semibold focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none {activeSection ===
                             item.id
                                 ? 'text-blue-600 dark:text-blue-400'
                                 : 'text-gray-600 dark:text-zinc-400'}">
-                            {item.name}
+                            {item.label}
                         </a>
                     {/each}
                 </div>

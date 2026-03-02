@@ -3,6 +3,9 @@
     import ExperienceCard from "$lib/components/ExperienceCard.svelte";
     import CertificateCard from "$lib/components/CertificateCard.svelte";
     import ProjectCard from "$lib/components/ProjectCard.svelte";
+    import { DEFAULT_LOCALE, isLocale, type Locale } from "$lib/i18n";
+    import { t } from "$lib/i18n-copy";
+    import { FAMILIARITY_TITLES_BY_LOCALE } from "$lib/familiarity-titles";
 
     const { data } = $props();
     const profile = $derived(data.profile);
@@ -13,6 +16,22 @@
     const certificates = $derived(data.certificates);
     const education = $derived(data.education);
     const languages = $derived(data.languages);
+
+    const locale = $derived.by<Locale>(() => {
+        const candidate = data.locale;
+        return isLocale(candidate) ? candidate : DEFAULT_LOCALE;
+    });
+    const ui = $derived(t(locale));
+
+    /**
+     * Normalizes a title string by trimming and converting to lowercase.
+     * @param title - The title string to normalize.
+     */
+    function normalizeTitle(title: string): string {
+        return title.trim().toLocaleLowerCase();
+    }
+
+    const normalizedFamiliarityTitles = $derived(new Set(FAMILIARITY_TITLES_BY_LOCALE[locale].map(normalizeTitle)));
 
     /**
      * Normalizes an e-mail value to a mailto URL.
@@ -43,23 +62,13 @@
     const githubHref = $derived(toExternalHref(contact.github));
 
     const coreSkillGroups = $derived(
-        skills.filter(
-            (group: { title: string }) =>
-                group.title !== "Working Knowledge" &&
-                group.title !== "Familiarity" &&
-                group.title !== "Additional Technologies" &&
-                group.title !== "Basic knowledge"
-        )
+        skills.filter((group: { title: string }) => !normalizedFamiliarityTitles.has(normalizeTitle(group.title)))
     );
 
     const familiarityItems = $derived(
         skills
-            .filter(
-                (group: { title: string; items: string[] }) =>
-                    group.title === "Working Knowledge" ||
-                    group.title === "Familiarity" ||
-                    group.title === "Additional Technologies" ||
-                    group.title === "Basic knowledge"
+            .filter((group: { title: string; items: string[] }) =>
+                normalizedFamiliarityTitles.has(normalizeTitle(group.title))
             )
             .flatMap((group: { items: string[] }) => group.items)
     );
@@ -73,19 +82,19 @@
     <!-- About Section (Hero) -->
     <section id="about" class="flex min-h-[70vh] scroll-mt-24 flex-col justify-center py-20">
         <h1 class="mb-6 text-5xl font-extrabold tracking-tight md:text-7xl">
-            Hi, I'm <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
+            {ui.home.heroGreeting} <span class="text-blue-600 dark:text-blue-400">Colin Mörbe</span>
         </h1>
         <p class="max-w-2xl text-xl leading-relaxed text-gray-600 md:text-2xl dark:text-gray-300">{profile}</p>
         <div class="mt-10 flex gap-4">
             <a
                 href="#contact"
                 class="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-lg dark:bg-blue-500 dark:hover:bg-blue-600">
-                Get in touch
+                {ui.home.getInTouch}
             </a>
             <a
-                href="/cv"
+                href={`/${locale}/cv/`}
                 class="rounded-lg border border-gray-200 px-6 py-3 font-semibold transition-all hover:bg-gray-50 dark:border-slate-800 dark:hover:bg-slate-900">
-                View Resume
+                {ui.home.viewResume}
             </a>
         </div>
     </section>
@@ -93,7 +102,7 @@
     <!-- Skills Section -->
     <hr class="border-gray-100 dark:border-slate-800" />
     <section id="skills" class="scroll-mt-24 py-20">
-        <h2 class="mb-12 text-3xl font-bold">Technical Expertise</h2>
+        <h2 class="mb-12 text-3xl font-bold">{ui.home.technicalExpertise}</h2>
 
         <div class="grid gap-6 md:grid-cols-2">
             {#each coreSkillGroups as skillGroup (skillGroup.title)}
@@ -116,7 +125,7 @@
             <div
                 class="mt-8 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 dark:border-zinc-700 dark:bg-zinc-900/30">
                 <h3 class="mb-3 text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-zinc-400">
-                    Basic knowledge
+                    {ui.cv.basicKnowledge}
                 </h3>
                 <p class="text-sm text-gray-600 dark:text-zinc-400">{familiarityItems.join(" · ")}</p>
             </div>
@@ -126,7 +135,7 @@
     <!-- Experience Section -->
     <hr class="border-gray-100 dark:border-slate-800" />
     <section id="experience" class="scroll-mt-24 py-20">
-        <h2 class="mb-12 text-3xl font-bold">Professional Experience</h2>
+        <h2 class="mb-12 text-3xl font-bold">{ui.home.professionalExperience}</h2>
         <div class="space-y-6">
             {#each experience as exp (exp.title)}
                 <ExperienceCard {...exp} />
@@ -137,7 +146,7 @@
     <!-- Education Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
     <section id="education" class="scroll-mt-24 py-20">
-        <h2 class="mb-12 text-3xl font-bold">Education</h2>
+        <h2 class="mb-12 text-3xl font-bold">{ui.home.education}</h2>
         <div class="space-y-6">
             {#each education as edu (edu.institution)}
                 <article
@@ -153,7 +162,7 @@
     <!-- Languages Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
     <section id="languages" class="scroll-mt-24 py-20">
-        <h2 class="mb-12 text-3xl font-bold">Languages</h2>
+        <h2 class="mb-12 text-3xl font-bold">{ui.home.languages}</h2>
         <div class="space-y-2">
             {#each languages as language, i (i)}
                 <p class="text-base text-gray-700 dark:text-zinc-300">{language}</p>
@@ -164,7 +173,7 @@
     <!-- Projects Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
     <section id="projects" class="scroll-mt-24 py-20">
-        <h2 class="mb-12 text-3xl font-bold">Projects</h2>
+        <h2 class="mb-12 text-3xl font-bold">{ui.home.projects}</h2>
         <div class="grid gap-8 md:grid-cols-2">
             {#each projects as project (project.title)}
                 <ProjectCard {...project} />
@@ -175,10 +184,10 @@
     <!-- Certificates Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
     <section id="certificates" class="scroll-mt-24 py-20">
-        <h2 class="mb-12 text-3xl font-bold">Certificates</h2>
+        <h2 class="mb-12 text-3xl font-bold">{ui.home.certificates}</h2>
         <div class="grid gap-6 md:grid-cols-2">
             {#each certificates as cert (cert.title)}
-                <CertificateCard {...cert} />
+                <CertificateCard {...cert} ctaLabel={ui.home.viewCertificate} />
             {/each}
         </div>
     </section>
@@ -186,12 +195,11 @@
     <!-- Contact Section -->
     <hr class="border-gray-100 dark:border-zinc-800" />
     <section id="contact" class="min-h-[70vh] scroll-mt-24 py-20 pb-40">
-        <h2 class="mb-8 text-3xl font-bold">Get in Touch</h2>
+        <h2 class="mb-8 text-3xl font-bold">{ui.home.getInTouchHeading}</h2>
         <div class="grid gap-12 md:grid-cols-2">
             <div>
                 <p class="mb-6 text-lg text-gray-600 dark:text-gray-400">
-                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of your
-                    vision.
+                    {ui.home.contactIntro}
                 </p>
                 <ul class="space-y-4">
                     <li class="flex items-center gap-3">
@@ -270,7 +278,7 @@
             <form
                 name="contact"
                 method="POST"
-                action="/contact-success/"
+                action={`/${locale}/contact-success/`}
                 data-netlify="true"
                 netlify-honeypot="bot-field"
                 onsubmit={e => {
@@ -286,7 +294,7 @@
                     <input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off" />
                 </p>
                 <div class="flex flex-col gap-1">
-                    <label for="name" class="text-sm font-medium">Name</label>
+                    <label for="name" class="text-sm font-medium">{ui.home.name}</label>
                     <input
                         type="text"
                         id="name"
@@ -296,7 +304,7 @@
                         class="rounded-lg border border-gray-200 bg-white p-2 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-800 dark:bg-slate-950" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="email" class="text-sm font-medium">Email</label>
+                    <label for="email" class="text-sm font-medium">{ui.home.email}</label>
                     <input
                         type="email"
                         id="email"
@@ -306,7 +314,7 @@
                         class="rounded-lg border border-gray-200 bg-white p-2 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-800 dark:bg-slate-950" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="message" class="text-sm font-medium">Message</label>
+                    <label for="message" class="text-sm font-medium">{ui.home.message}</label>
                     <textarea
                         id="message"
                         name="message"
@@ -318,7 +326,7 @@
                 <button
                     type="submit"
                     class="mt-2 rounded-lg bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700">
-                    Send Message
+                    {ui.home.sendMessage}
                 </button>
             </form>
         </div>

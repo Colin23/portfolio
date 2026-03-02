@@ -1,31 +1,36 @@
 import { chromium } from "playwright";
 
 const BASE_URL = "http://127.0.0.1:4173";
-const CV_URL = `${BASE_URL}/cv/`;
 
-const outputPath = "static/colin-moerbe-cv.pdf";
+const targets = [
+    { locale: "en", url: `${BASE_URL}/en/cv/`, outputPath: "static/colin-moerbe-cv-en.pdf" },
+    { locale: "de", url: `${BASE_URL}/de/cv/`, outputPath: "static/colin-moerbe-cv-de.pdf" }
+];
 
 /**
- * Generates the CV PDF from the /cv route and writes it to the stable output path.
+ * Generates one PDF from a CV route.
  *
- * @returns {Promise<void>} Resolves when PDF generation is complete.
+ * @param {{ locale: string; url: string; outputPath: string }} target
+ * @returns {Promise<void>}
  */
-async function generatePdf() {
+async function generatePdfForTarget(target) {
     const browser = await chromium.launch({ headless: true });
 
     try {
         const page = await browser.newPage();
-        const response = await page.goto(CV_URL, { waitUntil: "networkidle" });
+        const response = await page.goto(target.url, { waitUntil: "networkidle" });
 
         if (!response || !response.ok()) {
             const status = response?.status() ?? "NO_RESPONSE";
-            throw new Error(`Failed to load CV page for PDF generation (status: ${status}).`);
+            throw new Error(
+                `Failed to load ${target.locale.toUpperCase()} CV page for PDF generation (status: ${status}).`
+            );
         }
 
         await page.emulateMedia({ media: "print" });
 
         await page.pdf({
-            path: outputPath,
+            path: target.outputPath,
             format: "A4",
             printBackground: true,
             displayHeaderFooter: false,
@@ -37,21 +42,30 @@ async function generatePdf() {
             }
         });
 
-        console.log(`✅ Generated ${outputPath}`);
+        console.log(`✅ Generated ${target.outputPath}`);
     } finally {
         await browser.close();
     }
 }
 
 /**
- * Handles PDF generation failures and exits the process with an error code.
+ * Generates all localized CV PDFs.
  *
- * @param {unknown} err - The thrown error.
- * @returns {never} This function always terminates the process.
+ * @returns {Promise<void>}
+ */
+async function generateAllPdfs() {
+    await Promise.all(targets.map(target => generatePdfForTarget(target)));
+}
+
+/**
+ * Handles PDF generation failures and exits with an error.
+ *
+ * @param {unknown} err
+ * @returns {never}
  */
 function handlePdfGenerationError(err) {
     console.error("❌ PDF generation failed:", err);
     process.exit(1);
 }
 
-generatePdf().catch(handlePdfGenerationError);
+generateAllPdfs().catch(handlePdfGenerationError);

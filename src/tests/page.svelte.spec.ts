@@ -7,6 +7,7 @@ describe("Home page smoke", () => {
     it("renders section headings", async () => {
         render(HomePage, {
             data: {
+                locale: "en",
                 profile: "Senior software engineer focused on maintainable web platforms.",
                 contact: {
                     email: "placeholder@example.com",

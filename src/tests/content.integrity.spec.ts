@@ -9,7 +9,7 @@ import path from "node:path";
  * @returns {string} UTF-8 file content.
  */
 function readContentFile(fileName: string): string {
-    const filePath = path.resolve("src/lib/content", fileName);
+    const filePath = path.resolve("src/lib/content/en", fileName);
     return fs.readFileSync(filePath, "utf-8");
 }
 

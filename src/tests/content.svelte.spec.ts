@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render } from "vitest-browser-svelte";
 import { page } from "vitest/browser";
-import Experience from "$lib/content/experience.md";
+import Experience from "$lib/content/en/experience.md";
 
 describe("Markdown Content Rendering", () => {
     it("should render Experience markdown correctly", async () => {
