@@ -5,7 +5,7 @@ import js from "@eslint/js";
 import svelte from "eslint-plugin-svelte";
 import { defineConfig } from "eslint/config";
 import globals from "globals";
-import tslint from "typescript-eslint";
+import tseslint from "typescript-eslint";
 import svelteConfig from "./svelte.config.js";
 import jsdocPlugin from "eslint-plugin-jsdoc";
 
@@ -84,7 +84,7 @@ export default defineConfig(
         }
     },
 
-    ...tslint.configs.strict.map(config => ({
+    ...tseslint.configs.strict.map(config => ({
         ...config,
         files: ["**/*.ts", "**/*.tsx"]
     })),
@@ -103,7 +103,7 @@ export default defineConfig(
             parserOptions: {
                 projectService: true,
                 extraFileExtensions: [".svelte"],
-                parser: tslint.parser,
+                parser: tseslint.parser,
                 svelteConfig
             }
         }

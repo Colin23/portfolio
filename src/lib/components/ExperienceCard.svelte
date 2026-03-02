@@ -32,7 +32,8 @@
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html content}
         </div>
-        <div class="absolute bottom-0 h-8 w-full bg-linear-to-t from-white to-transparent dark:from-zinc-900/50"></div>
+        <div class="absolute bottom-0 h-8 w-full bg-gradient-to-t from-white to-transparent dark:from-zinc-900/50">
+        </div>
     </div>
 
     <div class="mt-4 flex justify-end">
