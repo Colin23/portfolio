@@ -1,24 +1,35 @@
 <script lang="ts">
-    import Experience from "$lib/content/experience.md";
-    import Education from "$lib/content/education.md";
+    import Experience from "$lib/content/en/experience.md";
+    import Education from "$lib/content/en/education.md";
+    import type { Locale } from "$lib/i18n";
+    import { t } from "$lib/i18n-copy";
 
     const { data } = $props();
+    const locale = $derived((data.locale ?? "en") as Locale);
+    const ui = $derived(t(locale));
 </script>
 
 <div class="print-container flex flex-col gap-8 pt-24 print:block print:pt-0">
     <div class="mx-auto flex w-full max-w-5xl flex-col px-4 md:px-8 print:hidden">
         <div class="mb-4 flex flex-wrap items-center justify-start gap-2 sm:gap-4">
             <a
-                href="/"
+                href={`/${locale}/`}
                 class="rounded-lg border border-gray-200 px-4 py-2 transition-colors hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-                Back to Portfolio
+                {ui.cv.backToPortfolio}
             </a>
             <a
-                href="/colin-moerbe-cv.pdf"
+                href="/colin-moerbe-cv-en.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700 lg:hidden">
-                Download CV
+                CV (EN)
+            </a>
+            <a
+                href="/colin-moerbe-cv-de.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="rounded-lg bg-zinc-700 px-4 py-2 font-semibold text-white transition-colors hover:bg-zinc-800 lg:hidden dark:bg-zinc-800 dark:hover:bg-zinc-700">
+                Lebenslauf (DE)
             </a>
         </div>
     </div>
@@ -39,12 +50,12 @@
         </section>
 
         <section class="mb-10 print:mb-8">
-            <h2 class="mb-3 text-2xl font-bold">Profile</h2>
+            <h2 class="mb-3 text-2xl font-bold">{ui.cv.profile}</h2>
             <p class="leading-relaxed text-gray-800 dark:text-zinc-200 print:text-black">{data.profile}</p>
         </section>
 
         <section class="mb-10 print:mb-8">
-            <h2 class="mb-3 text-2xl font-bold">Technical Expertise</h2>
+            <h2 class="mb-3 text-2xl font-bold">{ui.cv.technicalExpertise}</h2>
             <div class="space-y-4">
                 {#each data.coreSkills as group (group.title)}
                     <div>
@@ -56,7 +67,7 @@
                 {/each}
                 {#if data.familiarity.length > 0}
                     <div>
-                        <h3 class="text-lg font-semibold">Basic knowledge</h3>
+                        <h3 class="text-lg font-semibold">{ui.cv.basicKnowledge}</h3>
                         <p class="mt-1 leading-relaxed text-gray-800 dark:text-zinc-200 print:text-black">
                             {data.familiarity.join(", ")}
                         </p>
@@ -76,7 +87,7 @@
         </section>
 
         <section class="mb-10 print:mb-8">
-            <h2 class="mb-3 text-2xl font-bold">Languages</h2>
+            <h2 class="mb-3 text-2xl font-bold">{ui.cv.languages}</h2>
             <div class="space-y-1">
                 {#each data.languages as language, i (i)}
                     <p class="text-base text-gray-800 dark:text-zinc-200 print:text-black">{language}</p>

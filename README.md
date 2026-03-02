@@ -16,6 +16,15 @@ This repository contains my personal portfolio.
 - **Runtime:** Bun
 - **Hosting:** Netlify
 
+## Bilingual Content Workflow (EN/DE)
+
+- Content lives in:
+    - `src/lib/content/en/`
+    - `src/lib/content/de/`
+- Filenames must be identical in both locales.
+- Content needs to be updated in both locales.
+- `bun run check:i18n` and `bun run generate:cv-pdf:local` should be run after updating content.
+
 ## Documentation
 
 - [Setup & Development Guide](docs/setup.md)

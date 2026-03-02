@@ -4,7 +4,8 @@ on:
   push:
     branches: [ main ]
     paths-ignore:
-      - 'static/colin-moerbe-cv.pdf'
+      - 'static/colin-moerbe-cv-en.pdf'
+      - 'static/colin-moerbe-cv-de.pdf'
   workflow_dispatch:
 
 permissions:
@@ -45,7 +46,7 @@ jobs:
       - name: Wait for preview server
         run: |
           for i in {1..30}; do
-            if curl -sSf http://127.0.0.1:4173/cv/ > /dev/null; then
+            if curl -sSf http://127.0.0.1:4173/en/cv/ > /dev/null && curl -sSf http://127.0.0.1:4173/de/cv/ > /dev/null; then
               echo "Preview server is up"
               exit 0
             fi
@@ -55,7 +56,7 @@ jobs:
           cat preview.log
           exit 1
 
-      - name: Generate CV PDF
+      - name: Generate CV PDFs
         run: bun run generate:cv-pdf
 
       - name: Stop preview server
@@ -66,20 +67,22 @@ jobs:
       - name: Install qpdf
         run: sudo apt-get update && sudo apt-get install -y qpdf
 
-      - name: Normalize generated PDF
+      - name: Normalize generated PDFs
         shell: bash
         run: |
-          if [ -f static/colin-moerbe-cv.pdf ]; then
-            qpdf --linearize static/colin-moerbe-cv.pdf static/colin-moerbe-cv.pdf.normalized
-            mv static/colin-moerbe-cv.pdf.normalized static/colin-moerbe-cv.pdf
-          fi
+          for file in static/colin-moerbe-cv-en.pdf static/colin-moerbe-cv-de.pdf; do
+            if [ -f "$file" ]; then
+              qpdf --linearize "$file" "$file.normalized"
+              mv "$file.normalized" "$file"
+            fi
+          done
 
       - name: Check for PDF changes
         id: pdf_paths
         shell: bash
         run: |
-          changed=$(git diff --name-only -- static/colin-moerbe-cv.pdf)
-          new=$(git ls-files --others --exclude-standard -- static/colin-moerbe-cv.pdf)
+          changed=$(git diff --name-only -- static/colin-moerbe-cv-en.pdf static/colin-moerbe-cv-de.pdf)
+          new=$(git ls-files --others --exclude-standard -- static/colin-moerbe-cv-en.pdf static/colin-moerbe-cv-de.pdf)
 
           if [ -z "$changed" ] && [ -z "$new" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -87,13 +90,15 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create pull request for updated PDF
+      - name: Create pull request for updated PDFs
         if: steps.pdf_paths.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: "chore: regenerate CV PDF"
-          title: "chore: regenerate CV PDF"
-          body: "Automated update of the CV PDF."
-          branch: "chore/update-cv-pdf"
+          commit-message: "chore: regenerate localized CV PDFs"
+          title: "chore: regenerate localized CV PDFs"
+          body: "Automated update of EN/DE CV PDFs."
+          branch: "chore/update-cv-pdfs"
           delete-branch: true
-          add-paths: static/colin-moerbe-cv.pdf
+          add-paths: |
+            static/colin-moerbe-cv-en.pdf
+            static/colin-moerbe-cv-de.pdf
