@@ -2,6 +2,10 @@ import type { Locale } from "$lib/i18n";
 
 export const copy = {
     en: {
+        site: {
+            description:
+                "Backend Software Engineer portfolio with projects, professional experience, technical skills, certificates, and a downloadable CV."
+        },
         nav: {
             skills: "Tech Stack",
             experience: "Experience",
@@ -53,6 +57,10 @@ export const copy = {
         }
     },
     de: {
+        site: {
+            description:
+                "Backend Software Engineer Portfolio mit Projekten, Berufserfahrung, Tech-Stack, Zertifikaten und downloadbarem Lebenslauf."
+        },
         nav: {
             skills: "Technologie",
             experience: "Erfahrung",

@@ -23,11 +23,7 @@
     });
 
     const localizedSiteTitle = "Colin Mörbe | Portfolio";
-    const localizedSiteDescription = $derived(
-        locale === "de"
-            ? "Backend Software Engineer Portfolio mit Projekten, Berufserfahrung, Tech-Stack, Zertifikaten und downloadbarem Lebenslauf."
-            : "Backend Software Engineer portfolio with projects, professional experience, technical skills, certificates, and a downloadable CV."
-    );
+    const localizedSiteDescription = $derived(ui.site.description);
 
     const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`);
 

@@ -309,10 +309,14 @@ export async function loadCvContent(locale: Locale): Promise<{
     const skills = parseSkills(await readContent(locale, "skills.md"));
     const languages = parseLanguages(await readContent(locale, "languages.md"));
 
-    const familiarityTitles = new Set(FAMILIARITY_TITLES_BY_LOCALE[locale]);
+    const normalizedFamiliarityTitles = new Set(
+        FAMILIARITY_TITLES_BY_LOCALE[locale].map(title => title.trim().toLocaleLowerCase())
+    );
 
-    const coreSkills = skills.filter(group => !familiarityTitles.has(group.title));
-    const familiarity = skills.filter(group => familiarityTitles.has(group.title)).flatMap(group => group.items);
+    const coreSkills = skills.filter(group => !normalizedFamiliarityTitles.has(group.title.trim().toLocaleLowerCase()));
+    const familiarity = skills
+        .filter(group => normalizedFamiliarityTitles.has(group.title.trim().toLocaleLowerCase()))
+        .flatMap(group => group.items);
 
     if (!contact.name || !contact.role || !contact.location || !contact.phone || !contact.email) {
         throw new Error("contact.md is missing required fields for CV rendering.");
