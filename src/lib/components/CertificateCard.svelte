@@ -1,12 +1,20 @@
 <script lang="ts">
+    /**
+     * Certificate card component for displaying a certificate entry.
+     *
+     * @property title Certificate title.
+     * @property info Supporting text (issuer/date).
+     * @property link Optional URL to the certificate.
+     * @property ctaLabel Call-to-action label for the certificate link.
+     */
     interface Props {
         title: string;
         info: string;
         link?: string;
-        ctaLabel?: string;
+        ctaLabel: string;
     }
 
-    const { title, info, link, ctaLabel = "View Certificate" }: Props = $props();
+    const { title, info, link, ctaLabel }: Props = $props();
 </script>
 
 <div

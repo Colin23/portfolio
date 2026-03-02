@@ -240,7 +240,10 @@
     });
 
     /**
-     * Triggers the CV download by opening the /cv route in a hidden iframe and printing it.
+     * Opens the locale-specific CV PDF in a new browser tab.
+     *
+     * The downloadCV function selects the file path based on the current locale
+     * and calls window.open with "_blank" and "noopener,noreferrer".
      */
     function downloadCV(): void {
         const file = locale === "de" ? "/colin-moerbe-cv-de.pdf" : "/colin-moerbe-cv-en.pdf";

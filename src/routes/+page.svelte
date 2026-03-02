@@ -3,7 +3,7 @@
     import ExperienceCard from "$lib/components/ExperienceCard.svelte";
     import CertificateCard from "$lib/components/CertificateCard.svelte";
     import ProjectCard from "$lib/components/ProjectCard.svelte";
-    import type { Locale } from "$lib/i18n";
+    import { DEFAULT_LOCALE, isLocale, type Locale } from "$lib/i18n";
     import { t } from "$lib/i18n-copy";
     import { FAMILIARITY_TITLES_BY_LOCALE } from "$lib/familiarity-titles";
 
@@ -17,7 +17,10 @@
     const education = $derived(data.education);
     const languages = $derived(data.languages);
 
-    const locale = $derived((data.locale ?? "en") as Locale);
+    const locale = $derived.by<Locale>(() => {
+        const candidate = data.locale;
+        return isLocale(candidate) ? candidate : DEFAULT_LOCALE;
+    });
     const ui = $derived(t(locale));
 
     /**
