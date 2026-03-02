@@ -1,10 +1,10 @@
 # Setup & Development Guide
 
-Follow these steps to get the portfolio project up and running on your local machine.
+Follow these steps to get the portfolio project up and running.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Ensure the following tools are installed:
 
 - [Bun](https://bun.com/) (latest version)
 - [Git](https://git-scm.com/)
@@ -28,14 +28,14 @@ Before you begin, ensure you have the following installed:
     ```bash
     bun run dev
     ```
-    Open [http://localhost:5173](http://localhost:5173) in your browser to see the result.
+    Open [http://localhost:5173](http://localhost:5173) to see the result.
 
 ## Content Management
 
 The project follows a **Single Source of Truth** pattern. Most content is stored in `src/lib/content/` as Markdown
 files.
 
-For detailed instructions on how to update your CV data, see [How to Update Content](./how-to-update.md).
+For detailed instructions on how to update the CV data, see [How to Update Content](./how-to-update.md).
 
 ## Deployment
 

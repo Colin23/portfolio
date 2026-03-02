@@ -10,9 +10,9 @@
   enterprise-scale system environment.
 - Analysis, design, and technical implementation of business requirements in close collaboration with the client.
 - Development of event- and workflow-based backend services for process automation.
-- Implementation of high-performance delta-load migration processes (>3 million records) using parallel processing.
+- Implementation of high-performance delta-load migration processes (more than three million records) using parallel processing.
 - Development of Kafka-based integration interfaces with high throughput.
-- Development, containerization, and operation of backend services on Kubernetes (Azure), as well as building AWS
+- Development, containerization and operation of backend services on Kubernetes (Azure), as well as building AWS
   infrastructure using CDK (Java).
 - Enhancement of CI/CD pipelines and sustainable reduction of recurring production issues through refactoring and
   improved logging and monitoring strategies.

@@ -4,7 +4,7 @@ This repository contains my personal portfolio.
 
 ## Project Structure
 
-- `src/lib/content/`: Markdown files containing CV data (Experience, Skills, Projects, ...).
+- `src/lib/content/`: Markdown files containing CV data (Experience, Skills, Projects, …).
 - `src/routes/cv/`: The CV page with print-optimized styling for PDF generation.
 - `docs/`: Documentation for planning, tech stack, and updates.
 

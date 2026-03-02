@@ -27,7 +27,7 @@
         <p class="mt-1 text-base font-medium text-gray-700 dark:text-zinc-300">{role}</p>
     {/if}
 
-    <div class="relative mt-4 mb-auto max-h-[80px] overflow-hidden">
+    <div class="relative mt-4 mb-auto max-h-20 overflow-hidden">
         <div class="prose prose-sm max-w-none dark:prose-invert">
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html content}

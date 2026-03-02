@@ -3,10 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * Parses contact markdown bullet lines in format:
+ * Parses contact Markdown bullet lines in format:
  * - **Key:** Value
  *
- * @param {string} content - Raw markdown content from contact.md.
+ * @param {string} content - Raw Markdown content from contact.md.
  * @returns {{name?: string; role?: string; location?: string; phone?: string; email?: string; linkedin?: string; github?: string}} Parsed contact object.
  */
 function parseContact(content: string): {
@@ -44,9 +44,9 @@ function parseContact(content: string): {
 }
 
 /**
- * Parses profile markdown as plain paragraph text.
+ * Parses profile Markdown as plain paragraph text.
  *
- * @param {string} content - Raw markdown content from profile.md.
+ * @param {string} content - Raw Markdown content from profile.md.
  * @returns {string} Profile summary text.
  */
 function parseProfile(content: string): string {
@@ -60,7 +60,7 @@ function parseProfile(content: string): string {
 }
 
 /**
- * Parses skills markdown into section objects.
+ * Parses skills Markdown into section objects.
  */
 function parseSkills(content: string): Array<{ title: string; items: string[] }> {
     const sections = content.split(/^## /m).slice(1);
@@ -77,9 +77,9 @@ function parseSkills(content: string): Array<{ title: string; items: string[] }>
 }
 
 /**
- * Parses languages markdown into array of entries.
+ * Parses languages Markdown into an array of entries.
  *
- * @param {string} content - Raw markdown content from languages.md.
+ * @param {string} content - Raw Markdown content from languages.md.
  * @returns {string[]} Parsed language entries.
  */
 function parseLanguages(content: string): string[] {

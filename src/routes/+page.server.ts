@@ -93,7 +93,7 @@ function parseCertificates(content: string): Array<{ title: string; info: string
         const infoLine = lines.find(l => l.startsWith("_") && l.endsWith("_"));
         const info = infoLine ? infoLine.replaceAll("_", "").trim() : "";
 
-        // Extract link from Markdown format [Text](URL)
+        // Extract the link from Markdown format [Text](URL)
         const link = lines.find(l => l.includes("[View Certificate]"))?.match(/\(([^)]+)\)/)?.[1];
 
         return {
@@ -184,7 +184,7 @@ function parseSkills(content: string): Array<{ title: string; items: string[] }>
 }
 
 /**
- * Parses the profile markdown content.
+ * Parses the profile Markdown content.
  *
  * @param {string} content - The raw Markdown content from profile.md.
  * @returns {string} Profile summary text.
@@ -200,7 +200,7 @@ function parseProfile(content: string): string {
 }
 
 /**
- * Parses the contact markdown content.
+ * Parses the contact Markdown content.
  *
  * @param {string} content - The raw Markdown content from contact.md.
  * @returns {{name?: string; role?: string; location?: string; phone?: string; email?: string; linkedin?: string; github?: string}} Contact fields.
@@ -240,7 +240,7 @@ function parseContact(content: string): {
 }
 
 /**
- * Parses the education markdown content.
+ * Parses the education Markdown content.
  *
  * @param {string} content - The raw Markdown content from education.md.
  * @returns {Array<{institution: string; degree: string; period: string}>} Array of education entries.
@@ -266,7 +266,7 @@ function parseEducation(content: string): Array<{ institution: string; degree: s
 }
 
 /**
- * Parses the languages markdown content.
+ * Parses the languages Markdown content.
  *
  * @param {string} content - The raw Markdown content from languages.md.
  * @returns {string[]} Array of language entries.
