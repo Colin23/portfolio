@@ -33,7 +33,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Install Playwright Chromium
-        run: bunx playwright@1.58.2 install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
 
       - name: Build site
         run: bun run build
